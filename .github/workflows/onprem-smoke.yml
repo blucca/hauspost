@@ -16,7 +16,7 @@ jobs:
       - name: Provision and start the real Apertus stack
         run: |
           mkdir -p temp/onprem-smoke
-          { uname -a; free -h; df -h .; docker version --format '{{.Server.Version}}'; } > temp/onprem-smoke/host.txt
+          { uname -a; lscpu; free -h; df -h .; docker version --format '{{.Server.Version}}'; } > temp/onprem-smoke/host.txt
           make run
 
       - name: Analyse a new German thread and check source evidence
@@ -90,7 +90,7 @@ jobs:
           lines += [f"- {'PASS' if value else 'FAIL'}: {key}" for key, value in summary["checks"].items()]
           if summary["error"]:
               lines += ["", summary["error"]]
-          lines += ["", f"Wall time: {summary['wall_seconds']} s", "", "Runtime: GitHub-hosted ubuntu-24.04, internal Compose network, real Q4_K_M Apertus weights."]
+          lines += ["", f"Wall time: {summary['wall_seconds']} s", "", "Runtime: GitHub-hosted ubuntu-24.04, private model network, loopback application endpoint, real Q4_K_M Apertus weights."]
           (output / "summary.md").write_text("\n".join(lines) + "\n")
           print(json.dumps(summary, ensure_ascii=False, indent=2))
           raise SystemExit(0 if passed else 1)
@@ -103,6 +103,8 @@ jobs:
           docker compose -f track_2b/compose.yaml -f track_2b/compose.onprem.yaml logs --no-color --tail 120 > temp/onprem-smoke/containers.log 2>&1 || true
           docker stats --no-stream --format '{{json .}}' > temp/onprem-smoke/resources.jsonl || true
           docker compose -f track_2b/compose.yaml -f track_2b/compose.onprem.yaml ps -a > temp/onprem-smoke/containers.txt || true
+          app_id=$(docker compose -f track_2b/compose.yaml -f track_2b/compose.onprem.yaml ps -q app)
+          if [ -n "$app_id" ]; then docker inspect --format '{{json .NetworkSettings.Ports}}' "$app_id" > temp/onprem-smoke/app-ports.json; fi
           if [ -f temp/onprem-smoke/summary.md ]; then cat temp/onprem-smoke/summary.md >> "$GITHUB_STEP_SUMMARY"; fi
 
       - uses: actions/upload-artifact@v4

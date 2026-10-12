@@ -20,7 +20,7 @@ For Docker access through sudo, use `make DOCKER='sudo docker' run`.
 
 `make run` first invokes `make provision`. A short-lived Python container downloads the pinned model **directly from its Hugging Face publisher** into `track_2b/models/`. It resumes an interrupted download and checks the expected file size before moving it into place. The repository's existing `*.gguf` rule excludes both the model and its partial download from Git. Model files remain outside the application image and published source.
 
-Provisioning requires access to Docker Hub, GHCR and Hugging Face. After provisioning, the application and model containers use an **internal Docker network**. The application sends source text and prompts to `http://model:8080/v1`; model port 8080 stays inside that network. The browser-facing port is bound to the host's loopback address. Application and model containers receive their artifacts locally at runtime.
+Provisioning requires access to Docker Hub, GHCR and Hugging Face. At runtime, the model joins the **internal `runtime` network**. The application joins that model network and a regular `ingress` bridge that publishes its browser-facing port on **127.0.0.1:4377**. The shipped on-prem application sends source text and prompts to `http://model:8080/v1`; model port 8080 stays inside the model network. The ingress bridge supplies the application's host-facing connection and an outbound route. The configured application uses the local model endpoint for its LLM requests. Application and model containers receive their artifacts locally at runtime.
 
 For a provisioned host:
 

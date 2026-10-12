@@ -107,7 +107,7 @@ function renderFields() {
       if (mark) $('sourceText').scrollTop = mark.offsetTop - $('sourceText').offsetTop - 70;
     });
     detail.append(label);
-    const missingText = key === 'apartment' ? 'Ask for the apartment number' : key === 'active_issue' && state.result.fields.resolved_issue.value ? 'Tenant reports the issue resolved' : key === 'requested_visit' ? 'Arrange a time with the tenant' : 'Empty in this thread';
+    const missingText = key === 'apartment' ? 'Ask for the apartment number' : key === 'active_issue' ? state.result.fields.resolved_issue.value ? 'Tenant reports the issue resolved' : 'General correspondence for review' : key === 'requested_visit' ? 'Arrange a time with the tenant' : 'Empty in this thread';
     detail.append(node('p', `field-value${field.value ? '' : ' missing'}`, field.value || missingText));
     const proofLabels = {matched:'Exact passage found', unmatched:'Source passage needs correction', ambiguous:'Passage occurs more than once', missing:field.quote ? 'Conflicting or incomplete information' : 'Detail to be supplied', operator:'Coordinator entry'};
     if (field.value || field.quote || key === 'apartment') detail.append(node('p', `field-proof ${field.evidence_status}`, proofLabels[field.evidence_status]));
@@ -138,7 +138,7 @@ function renderFields() {
 
 function missingDetails() {
   const f = state.result.fields;
-  if (!f.active_issue.value && f.resolved_issue.value) return [];
+  if (!f.active_issue.value) return [];
   const missing = ['active_issue','property_address','apartment'].filter(key => !f[key].value);
   if (!f.requested_visit.value && f.requested_visit.quote) missing.push('requested_visit');
   return missing;
@@ -146,6 +146,7 @@ function missingDetails() {
 
 function draftType() {
   if (!state.result.fields.active_issue.value && state.result.fields.resolved_issue.value) return 'closure';
+  if (!state.result.fields.active_issue.value) return 'general';
   return missingDetails().length ? 'clarification' : 'repair';
 }
 
@@ -159,10 +160,10 @@ function renderReview() {
   $('reviewCount').textContent = `${state.approved.size} of ${entries.length} details reviewed`;
   $('confirmAll').disabled = !entries.some(([key, field]) => !state.approved.has(key) && ['matched','operator'].includes(field.evidence_status));
   $('handoffButton').disabled = remaining > 0 || badSources.length > 0 || entries.length === 0;
-  $('handoffButton').textContent = {repair:'Create repair brief', clarification:'Draft clarification', closure:'Draft closure reply'}[type];
-  $('handoffHint').textContent = badSources.length ? 'Attach an exact source passage to each flagged detail.' : remaining ? 'Read the source highlights, then confirm the populated details.' : type === 'clarification' ? 'The reply asks for missing information. Visit requests stay unconfirmed.' : type === 'closure' ? 'Prepare a reply acknowledging the tenant’s resolved update.' : 'Create a copy-ready brief. Confirm the appointment in your own system.';
+  $('handoffButton').textContent = {repair:'Create repair brief', clarification:'Draft clarification', closure:'Draft closure reply', general:'Create routing note'}[type];
+  $('handoffHint').textContent = badSources.length ? 'Attach an exact source passage to each flagged detail.' : remaining ? 'Read the source highlights, then confirm the populated details.' : type === 'clarification' ? 'The reply asks for missing information. Visit requests stay unconfirmed.' : type === 'closure' ? 'Prepare a reply acknowledging the tenant’s resolved update.' : type === 'general' ? 'Prepare the original message for your property administration inbox.' : 'Create a copy-ready brief. Confirm the appointment in your own system.';
   $('attention').classList.toggle('ready', !badSources.length && !missing.length);
-  $('attentionText').textContent = badSources.length ? `${badSources.length} source ${badSources.length === 1 ? 'link needs' : 'links need'} attention before handoff.` : missing.length ? `Still needed: ${missing.map(key => ({active_issue:'current fault', property_address:'property address', apartment:'apartment number', requested_visit:'a clear visiting window'})[key]).join(', ')}.` : type === 'closure' ? 'Resolved update. Prepare a closure reply for review.' : 'Address and current repair are present. Review for handoff.';
+  $('attentionText').textContent = badSources.length ? `${badSources.length} source ${badSources.length === 1 ? 'link needs' : 'links need'} attention before handoff.` : missing.length ? `Still needed: ${missing.map(key => ({active_issue:'current fault', property_address:'property address', apartment:'apartment number', requested_visit:'a clear visiting window'})[key]).join(', ')}.` : type === 'closure' ? 'Resolved update. Prepare a closure reply for review.' : type === 'general' ? 'General correspondence. Review for your administration inbox.' : 'Address and current repair are present. Review for handoff.';
 }
 
 function render() {
@@ -247,14 +248,15 @@ function makeDrafts() {
   const value = key => fields[key].value || '';
   const type = draftType();
   const missing = missingDetails();
-  const lines = [`HausPost — ${type === 'repair' ? 'Repair brief' : type === 'closure' ? 'Resolved update' : 'Clarification needed'}`, '', `Prepared: ${new Date().toLocaleString()}`, `Property: ${value('property_address') || 'To be supplied'}`, `Apartment: ${value('apartment') || 'To be supplied'}`, `Tenant: ${value('contact_name') || 'To be supplied'}`, ''];
+  const lines = [`HausPost — ${{repair:'Repair brief', closure:'Resolved update', clarification:'Clarification needed', general:'General correspondence'}[type]}`, '', `Prepared: ${new Date().toLocaleString()}`, `Property: ${value('property_address') || 'To be supplied'}`, `Apartment: ${value('apartment') || 'To be supplied'}`, `Tenant: ${value('contact_name') || 'To be supplied'}`, ''];
   if (value('active_issue')) lines.push(`Current repair: ${value('active_issue')}`);
   if (value('resolved_issue')) lines.push(`Reported resolved: ${value('resolved_issue')}`);
   if (value('requested_visit')) lines.push(`Tenant-requested window: ${value('requested_visit')}`, 'Appointment state: awaiting coordinator confirmation.');
-  else if (type !== 'closure') lines.push('Visit: arrange a time with the tenant.');
+  else if (['repair','clarification'].includes(type)) lines.push('Visit: arrange a time with the tenant.');
   if (value('cancelled_visit')) lines.push(`Cancelled window: ${value('cancelled_visit')}`);
   if (missing.length) lines.push('', `Ask for: ${missing.map(key => FIELD_NAMES[key]).join('; ')}.`);
   if (type === 'closure') lines.push('', 'Next action: review the tenant’s resolved update and record closure in your maintenance system.');
+  if (type === 'general') lines.push('', 'Route: property administration inbox. Review the current inquiry in the original thread.', '', 'Original thread', state.text);
   lines.push('', 'Reviewed sources');
   for (const [key, field] of Object.entries(fields)) if (field.value) lines.push(`${FIELD_NAMES[key]}: ${field.evidence_status === 'operator' ? 'Coordinator entry' : `“${field.quote}”`}`);
 
@@ -265,8 +267,9 @@ function makeDrafts() {
     it:{hello:'Buongiorno,', thanks:'Grazie per il suo messaggio.', ask:'La preghiamo di comunicarci i seguenti dettagli: ', names:{active_issue:'il guasto attualmente presente',property_address:'l’indirizzo completo dell’immobile',apartment:'il numero del suo appartamento',requested_visit:'una fascia oraria disponibile per la visita'}, window:'Abbiamo preso nota della fascia oraria da lei richiesta.', next:'La ricontatteremo per concordare e confermare l’appuntamento.', closure:'Grazie per l’aggiornamento. Abbiamo preso nota che il problema segnalato è stato risolto.', bye:'Cordiali saluti,\nLa sua amministrazione'},
     en:{hello:'Hello,', thanks:'Thank you for your message.', ask:'Please send us the following details: ', names:{active_issue:'the current fault',property_address:'the full property address',apartment:'your apartment number',requested_visit:'a suitable visiting window'}, window:'We have noted your requested visiting window.', next:'We will contact you to arrange and confirm an appointment.', closure:'Thank you for the update. We have noted that the reported problem is resolved.', bye:'Kind regards,\nYour property management team'}
   }[language];
-  const reply = [copy.hello, '', type === 'closure' ? copy.closure : copy.thanks];
-  if (type !== 'closure') {
+  const generalReply = {de:'Vielen Dank für Ihre Nachricht. Wir prüfen Ihr Anliegen und melden uns bei Ihnen.',fr:'Merci pour votre message. Nous allons examiner votre demande et vous recontacter.',it:'Grazie per il suo messaggio. Esamineremo la sua richiesta e la ricontatteremo.',en:'Thank you for your message. We will review your inquiry and get back to you.'};
+  const reply = [copy.hello, '', type === 'closure' ? copy.closure : type === 'general' ? generalReply[language] : copy.thanks];
+  if (['repair','clarification'].includes(type)) {
     if (missing.length) reply.push('', copy.ask + missing.map(key => copy.names[key]).join(', ') + '.');
     if (value('requested_visit')) reply.push('', copy.window);
     reply.push('', copy.next);
@@ -320,10 +323,10 @@ $('handoffButton').addEventListener('click', () => {
   if ($('handoffButton').disabled) return;
   state.drafts = makeDrafts();
   const type = state.drafts.type;
-  $('handoffTitle').textContent = {repair:'Ready for the maintenance desk', clarification:'Ask for the missing detail', closure:'Acknowledge the resolved repair'}[type];
+  $('handoffTitle').textContent = {repair:'Ready for the maintenance desk', clarification:'Ask for the missing detail', closure:'Acknowledge the resolved repair', general:'Route the current inquiry'}[type];
   $('handoffDescription').textContent = 'Copy-ready drafts. Review the wording, then send through your own system.';
   $('replyTab').textContent = `Tenant reply · ${LANGUAGES[state.drafts.language]}`;
-  showDraftTab(type === 'repair' ? 'brief' : 'reply');
+  showDraftTab(['repair','general'].includes(type) ? 'brief' : 'reply');
   $('handoffDialog').showModal();
 });
 $('briefTab').addEventListener('click', () => showDraftTab('brief'));

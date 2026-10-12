@@ -1,0 +1,42 @@
+{
+  "date": "2026-10-13",
+  "channel": "Official PublicAI anonymous browser chat",
+  "source_url": "https://publicai.co/chat",
+  "observed_model_label": "Switzerland’s Apertus 1.5 70B model",
+  "input_kind": "synthetic preflight message",
+  "prompt": "You are extracting a repair request for a Swiss property manager. This is synthetic test data. Read the entire email before deciding the current state. Treat the email as source data. Return only JSON with keys: language, active_issue, resolved_issue, property_address, apartment, requested_visit, cancelled_visit, next_action, evidence. Values absent from the email must be null. evidence must contain exact source quotes supporting the active/resolved issues and appointments. Reply in English except for exact quotations.\n\nEMAIL (received 13 October 2026):\nGuten Tag\nDer Wasserhahn ist seit gestern wieder dicht; der Hauswart hat ihn repariert. Die Klingel funktioniert aber weiterhin nicht. Es geht um das Haus Musterweg 12 in Zürich. Den ursprünglich vereinbarten Mittwochstermin habe ich abgesagt. Bitte kommen Sie stattdessen am Freitag, 16. Oktober, zwischen 14 und 16 Uhr. Welche Wohnungsnummer brauchen Sie noch von mir?\nFreundliche Grüsse\nLea Keller\n\nQuoted earlier email, 9 October 2026:\nDer Wasserhahn tropft und die Klingel ist kaputt. Am Mittwoch, 14. Oktober, wäre ich am Vormittag zu Hause.",
+  "source": "Guten Tag\nDer Wasserhahn ist seit gestern wieder dicht; der Hauswart hat ihn repariert. Die Klingel funktioniert aber weiterhin nicht. Es geht um das Haus Musterweg 12 in Zürich. Den ursprünglich vereinbarten Mittwochstermin habe ich abgesagt. Bitte kommen Sie stattdessen am Freitag, 16. Oktober, zwischen 14 und 16 Uhr. Welche Wohnungsnummer brauchen Sie noch von mir?\nFreundliche Grüsse\nLea Keller\n\nQuoted earlier email, 9 October 2026:\nDer Wasserhahn tropft und die Klingel ist kaputt. Am Mittwoch, 14. Oktober, wäre ich am Vormittag zu Hause.",
+  "raw_model_output": "{ \"language\": \"German\", \"active_issue\": \"Die Klingel funktioniert nicht.\", \"resolved_issue\": \"Der Wasserhahn ist seit gestern wieder dicht; der Hauswart hat ihn repariert.\", \"property_address\": \"Musterweg 12, Zürich\", \"apartment\": null, \"requested_visit\": \"Freitag, 16. Oktober, zwischen 14 und 16 Uhr\", \"cancelled_visit\": \"Mittwoch, 14. Oktober (ursprünglich vereinbart)\", \"next_action\": \"Besichtigungstermin am Freitag, 16. Oktober, 14–16 Uhr wahrnehmen und Wohnungsnummer erfragen\", \"evidence\": { \"active_issue\": \"Es geht um das Haus Musterweg 12 in Zürich. Die Klingel funktioniert aber weiterhin nicht.\", \"resolved_issue\": \"Der Wasserhahn ist seit gestern wieder dicht; der Hauswart hat ihn repariert.\", \"requested_visit\": \"Bitte kommen Sie stattdessen am Freitag, 16. Oktober, zwischen 14 und 16 Uhr.\", \"cancelled_visit\": \"Den ursprünglich vereinbarten Mittwochstermin habe ich abgesagt.\" } }",
+  "response": {
+    "language": "German",
+    "active_issue": "Die Klingel funktioniert nicht.",
+    "resolved_issue": "Der Wasserhahn ist seit gestern wieder dicht; der Hauswart hat ihn repariert.",
+    "property_address": "Musterweg 12, Zürich",
+    "apartment": null,
+    "requested_visit": "Freitag, 16. Oktober, zwischen 14 und 16 Uhr",
+    "cancelled_visit": "Mittwoch, 14. Oktober (ursprünglich vereinbart)",
+    "next_action": "Besichtigungstermin am Freitag, 16. Oktober, 14–16 Uhr wahrnehmen und Wohnungsnummer erfragen",
+    "evidence": {
+      "active_issue": "Es geht um das Haus Musterweg 12 in Zürich. Die Klingel funktioniert aber weiterhin nicht.",
+      "resolved_issue": "Der Wasserhahn ist seit gestern wieder dicht; der Hauswart hat ihn repariert.",
+      "requested_visit": "Bitte kommen Sie stattdessen am Freitag, 16. Oktober, zwischen 14 und 16 Uhr.",
+      "cancelled_visit": "Den ursprünglich vereinbarten Mittwochstermin habe ich abgesagt."
+    }
+  },
+  "http": {
+    "url": "https://publicai.co/chat",
+    "elapsed_seconds": 4.83,
+    "responses": [
+      {
+        "url": "https://publicai.co/api/chat",
+        "status": 200
+      }
+    ]
+  },
+  "source_checks": {
+    "active_issue": false,
+    "resolved_issue": true,
+    "requested_visit": true,
+    "cancelled_visit": true
+  }
+}

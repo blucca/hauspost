@@ -13,7 +13,7 @@ services:
     ports:
       - "127.0.0.1:4377:4377"
     networks:
-      - runtime
+      - ingress
     mem_limit: 512m
     cpus: 1
     healthcheck:
@@ -28,4 +28,4 @@ services:
         max-file: "1"
 
 networks:
-  runtime: {}
+  ingress: {}

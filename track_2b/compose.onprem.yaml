@@ -5,6 +5,9 @@ services:
       LLM_NAME: swiss-ai/apertus-v1.5-8b
       LLM_API_KEY: ""
       LLM_TIMEOUT_SECONDS: "420"
+    networks:
+      - ingress
+      - runtime
     depends_on:
       model:
         condition: service_healthy
