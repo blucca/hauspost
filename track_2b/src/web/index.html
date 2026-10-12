@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Turn a multilingual tenant email into a source-checked repair brief. Powered by Apertus, ready for your own infrastructure.">
+  <meta name="theme-color" content="#214bd6">
+  <title>HausPost · Repair dispatch desk</title>
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="app.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#workspace">Skip to the dispatch desk</a>
+  <header class="masthead">
+    <a class="brand" href="./" aria-label="HausPost home">
+      <svg width="34" height="40" viewBox="0 0 34 40" aria-hidden="true"><path d="M3 38V14L17 3l14 11v24Z" fill="none" stroke="currentColor" stroke-width="3"/><path d="M10 19h14M10 27h14" stroke="currentColor" stroke-width="3"/></svg>
+      <span>HausPost</span>
+    </a>
+    <p>Repair dispatch desk</p>
+    <nav aria-label="Product"><span id="modeBadge" class="mode-badge">Loading desk</span><a href="https://github.com/blucca/hauspost#run-hauspost" target="_blank" rel="noreferrer">Run on your infrastructure</a></nav>
+  </header>
+  <main id="workspace">
+    <section class="intro" aria-labelledby="pageTitle">
+      <div><h1 id="pageTitle">A clear brief for the next visit.</h1><p>The latest fault, the finished repair, and the changed appointment. Each tied to the tenant’s words.</p></div>
+      <label class="example-picker" for="casePicker">Open an example<select id="casePicker"><option>Loading examples…</option></select></label>
+    </section>
+    <div id="notice" class="notice" role="status" aria-live="polite"></div>
+    <div class="desk">
+      <section class="thread-panel" aria-labelledby="threadTitle">
+        <div class="panel-heading"><div><span id="languageBadge" class="language-badge">DE</span><h2 id="threadTitle">Tenant thread</h2></div><button id="editThread" class="text-button" type="button">Edit message</button></div>
+        <div class="source-caption"><span id="sourceLabel">Synthetic example</span><span id="sourceLength"></span></div>
+        <div id="sourceText" class="source-text" tabindex="0" aria-label="Original tenant email"></div>
+        <label id="sourceEditorLabel" class="source-editor-label" hidden>Paste the latest email and its quoted history<textarea id="sourceEditor" maxlength="16000" spellcheck="false"></textarea></label>
+        <div class="source-actions"><button id="analyseButton" class="button primary" type="button">Load example brief</button><span id="runLabel">Prepared example</span></div>
+        <p class="source-help" id="sourceHelp">Choose a detail on the repair brief to find its original passage.</p>
+        <details class="hosting-note"><summary>Where does the message go?</summary><p id="privacyNote">This example runs in your browser. Your edits stay on this page. The self-hosted application sends analysis requests to the Apertus server configured by its operator.</p><p>Drafts leave the desk when you copy or download them. Source code and deployment instructions are <a href="https://github.com/blucca/hauspost" target="_blank" rel="noreferrer">on GitHub</a>.</p></details>
+      </section>
+
+      <section class="brief-panel" aria-labelledby="briefTitle">
+        <div class="brief-heading"><div><h2 id="briefTitle">Repair brief</h2><p id="briefSubtitle">Review the source before handing it over.</p></div><span class="paper-mark" aria-hidden="true">HP</span></div>
+        <div id="attention" class="attention"><span class="attention-dot" aria-hidden="true"></span><p id="attentionText">Loading the example…</p></div>
+        <div id="fields" class="fields"></div>
+        <div id="emptyBrief" class="empty-brief" hidden><svg width="78" height="66" viewBox="0 0 78 66" aria-hidden="true"><path d="M7 12h64v45H7zM8 14l31 23 31-23" fill="none" stroke="currentColor" stroke-width="3"/><path d="M26 5h26" stroke="currentColor" stroke-width="3"/></svg><h3>Start with the tenant’s latest update.</h3><p>Apertus will separate the current request from the quoted history.</p></div>
+        <div id="reviewActions" class="review-actions"><div class="review-progress"><span id="reviewCount"></span><button id="confirmAll" class="text-button" type="button">Confirm sourced details</button></div><button id="handoffButton" class="button primary handoff-button" type="button" disabled>Draft clarification</button><p id="handoffHint">Review each populated detail. Add the apartment number when you have it.</p></div>
+      </section>
+    </div>
+    <footer class="footer"><p>Built with Apertus for organisation-managed deployment.</p><a href="https://github.com/blucca/hauspost/tree/main/track_2b/data" target="_blank" rel="noreferrer">Examples &amp; evaluation data</a></footer>
+  </main>
+
+  <dialog id="editDialog" aria-labelledby="editTitle">
+    <form id="editForm">
+      <div class="dialog-heading"><h2 id="editTitle">Edit detail</h2><button class="close-dialog" type="button" data-close="editDialog" aria-label="Close detail editor">×</button></div>
+      <label>Value<textarea id="fieldValue" rows="2" maxlength="1600"></textarea></label>
+      <label>Exact passage in the tenant thread<textarea id="fieldQuote" rows="3" maxlength="2000"></textarea></label>
+      <label class="checkbox-label"><input id="operatorEntry" type="checkbox">I’m adding this detail from my own information.</label>
+      <p class="field-help">A source passage must appear exactly once in the message. Details you add yourself are labelled “Coordinator entry”.</p>
+      <p id="editError" class="form-error" role="alert"></p>
+      <div class="dialog-actions"><button class="button secondary" type="button" data-close="editDialog">Cancel</button><button class="button primary" type="submit">Save detail</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="handoffDialog" class="handoff-dialog" aria-labelledby="handoffTitle">
+    <div class="dialog-heading"><div><h2 id="handoffTitle">Your handoff</h2><p id="handoffDescription">Copy into your maintenance system.</p></div><button class="close-dialog" type="button" data-close="handoffDialog" aria-label="Close handoff">×</button></div>
+    <div class="output-tabs" role="group" aria-label="Choose draft"><button id="briefTab" class="selected" type="button" aria-pressed="true">Internal brief</button><button id="replyTab" type="button" aria-pressed="false">Tenant reply</button></div>
+    <pre id="handoffText" tabindex="0"></pre>
+    <div class="dialog-actions"><span id="copyStatus" role="status" aria-live="polite"></span><button id="downloadButton" class="button secondary" type="button">Download text</button><button id="copyButton" class="button primary" type="button">Copy draft</button></div>
+  </dialog>
+</body>
+</html>

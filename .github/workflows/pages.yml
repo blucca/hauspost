@@ -1,0 +1,39 @@
+name: Check and publish example desk
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: hauspost-pages
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-24.04
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check the source contract and prepare static assets
+        run: |
+          PYTHONDONTWRITEBYTECODE=1 python track_2b/tests/check.py
+          node --check track_2b/src/web/app.js
+          mkdir -p temp/site
+          cp -R track_2b/src/web/. temp/site/
+          cp -R track_2b/data temp/site/data
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: temp/site
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4

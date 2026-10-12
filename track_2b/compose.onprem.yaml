@@ -1,0 +1,70 @@
+services:
+  app:
+    environment:
+      LLM_BASE_URL: http://model:8080/v1
+      LLM_NAME: swiss-ai/apertus-v1.5-8b
+      LLM_API_KEY: ""
+      LLM_TIMEOUT_SECONDS: "420"
+    depends_on:
+      model:
+        condition: service_healthy
+
+  model:
+    image: ghcr.io/ggml-org/llama.cpp@sha256:052888c603894ecfa08deb6714fdc2d7084e491e174d5ab41bfb36b49ee7151c
+    command:
+      - -m
+      - /models/apertus-v1.5-8b-text-q4_k_m.gguf
+      - --alias
+      - swiss-ai/apertus-v1.5-8b
+      - --host
+      - 0.0.0.0
+      - --port
+      - "8080"
+      - -c
+      - "4096"
+      - -np
+      - "1"
+      - -t
+      - "4"
+      - -b
+      - "256"
+      - -ub
+      - "128"
+      - --jinja
+      - --chat-template-kwargs
+      - '{"enable_thinking":false}'
+    volumes:
+      - ./models:/models:ro
+    networks:
+      - runtime
+    mem_limit: 7g
+    cpus: 4
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8080/health"]
+      interval: 5s
+      timeout: 5s
+      start_period: 30s
+      retries: 60
+    logging:
+      driver: json-file
+      options:
+        max-size: 5m
+        max-file: "1"
+
+  model-download:
+    profiles: [provision]
+    build: .
+    image: hauspost-app:local
+    user: "0:0"
+    command: ["python", "download_model.py", "/models"]
+    volumes:
+      - ./models:/models
+    networks:
+      - provisioning
+    mem_limit: 128m
+    cpus: 1
+
+networks:
+  runtime:
+    internal: true
+  provisioning: {}

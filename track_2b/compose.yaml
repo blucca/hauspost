@@ -1,0 +1,31 @@
+name: hauspost
+
+services:
+  app:
+    build: .
+    image: hauspost-app:local
+    environment:
+      HOST: 0.0.0.0
+      PORT: "4377"
+      LLM_BASE_URL: ${LLM_BASE_URL:-}
+      LLM_NAME: ${LLM_NAME:-swiss-ai/apertus-v1.5-8b}
+      LLM_API_KEY: ${LLM_API_KEY:-}
+    ports:
+      - "127.0.0.1:4377:4377"
+    networks:
+      - runtime
+    mem_limit: 512m
+    cpus: 1
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:4377/api/status', timeout=3).read()"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    logging:
+      driver: json-file
+      options:
+        max-size: 5m
+        max-file: "1"
+
+networks:
+  runtime: {}

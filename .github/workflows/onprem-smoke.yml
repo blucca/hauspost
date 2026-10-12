@@ -1,0 +1,117 @@
+name: Apertus on-prem smoke
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  onprem:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Provision and start the real Apertus stack
+        run: |
+          mkdir -p temp/onprem-smoke
+          { uname -a; free -h; df -h .; docker version --format '{{.Server.Version}}'; } > temp/onprem-smoke/host.txt
+          make run
+
+      - name: Analyse a new German thread and check source evidence
+        run: |
+          python3 - <<'PY'
+          import json
+          import re
+          import time
+          import urllib.error
+          import urllib.request
+          from pathlib import Path
+
+          output = Path("temp/onprem-smoke")
+          output.mkdir(parents=True, exist_ok=True)
+          source = (
+              "Von: Eva Keller\n"
+              "Betreff: Ringstrasse 12, Wohnung 3B – neue Meldung\n\n"
+              "Der tropfende Wasserhahn wurde am Montag repariert. "
+              "Seit gestern ist die Klingel defekt. "
+              "Die Wohnung ist in der Ringstrasse 12, 8000 Zürich, Wohnung 3B. "
+              "Der für Mittwoch vorgeschlagene Termin entfällt. "
+              "Ich könnte stattdessen am Freitag zwischen 14 und 16 Uhr zu Hause sein. "
+              "Bitte bestätigen Sie mir einen Termin; bisher wurde Freitag noch nicht bestätigt.\n\n"
+              "Freundliche Grüsse\nEva Keller"
+          )
+          request_body = {"text": source}
+          (output / "input.json").write_text(json.dumps(request_body, ensure_ascii=False, indent=2))
+          summary = {"checks": {}, "model": "swiss-ai/apertus-v1.5-8b", "error": None}
+          started = time.monotonic()
+          try:
+              with urllib.request.urlopen("http://127.0.0.1:4377/api/status", timeout=10) as response:
+                  (output / "status.json").write_bytes(response.read())
+              request = urllib.request.Request(
+                  "http://127.0.0.1:4377/api/analyse",
+                  data=json.dumps(request_body).encode(),
+                  headers={"Content-Type": "application/json"},
+              )
+              with urllib.request.urlopen(request, timeout=480) as response:
+                  raw = response.read()
+              (output / "response.json").write_bytes(raw)
+              result = json.loads(raw)
+              summary.update({key: result.get(key) for key in ("model", "usage", "elapsed_ms", "language")})
+              (output / "raw-model-output.txt").write_text(str(result.get("raw_model_output", "")))
+              fields = result["fields"]
+              checks = summary["checks"]
+              checks["real_apertus_8b"] = result.get("model") == "swiss-ai/apertus-v1.5-8b"
+              checks["active_bell"] = bool(re.search(r"bell|intercom|klingel|sprechanlage", str(fields["active_issue"]["value"]), re.I))
+              checks["resolved_tap"] = bool(re.search(r"tap|faucet|wasserhahn", str(fields["resolved_issue"]["value"]), re.I))
+              requested = fields["requested_visit"].get("quote", "")
+              checks["requested_friday"] = bool(re.search(r"freitag|friday", requested, re.I)) or all(re.search(rf"\b{hour}\b", requested) for hour in (14, 16))
+              checks["cancelled_wednesday"] = bool(re.search(r"mittwoch|wednesday", fields["cancelled_visit"].get("quote", ""), re.I))
+              utf16 = source.encode("utf-16-le")
+              for name in ("active_issue", "resolved_issue", "requested_visit", "cancelled_visit"):
+                  field = fields[name]
+                  start, end = field.get("start"), field.get("end")
+                  has_span = isinstance(start, int) and isinstance(end, int) and 0 <= start < end <= len(utf16) // 2
+                  exact_span = has_span and utf16[2 * start:2 * end].decode("utf-16-le") == field.get("quote")
+                  checks[f"{name}_source_matched"] = field.get("evidence_status") == "matched" and exact_span
+              if not all(checks.values()):
+                  raise AssertionError("Failed checks: " + ", ".join(key for key, value in checks.items() if not value))
+          except urllib.error.HTTPError as error:
+              (output / "http-error.txt").write_bytes(error.read())
+              summary["error"] = str(error)
+          except Exception as error:
+              summary["error"] = f"{type(error).__name__}: {error}"
+          summary["wall_seconds"] = round(time.monotonic() - started, 2)
+          passed = bool(summary["checks"]) and all(summary["checks"].values()) and summary["error"] is None
+          summary["passed"] = passed
+          (output / "summary.json").write_text(json.dumps(summary, ensure_ascii=False, indent=2))
+          lines = ["# Apertus 8B on-prem smoke", "", f"Result: {'PASS' if passed else 'FAIL'}", ""]
+          lines += [f"- {'PASS' if value else 'FAIL'}: {key}" for key, value in summary["checks"].items()]
+          if summary["error"]:
+              lines += ["", summary["error"]]
+          lines += ["", f"Wall time: {summary['wall_seconds']} s", "", "Runtime: GitHub-hosted ubuntu-24.04, internal Compose network, real Q4_K_M Apertus weights."]
+          (output / "summary.md").write_text("\n".join(lines) + "\n")
+          print(json.dumps(summary, ensure_ascii=False, indent=2))
+          raise SystemExit(0 if passed else 1)
+          PY
+
+      - name: Collect bounded runtime diagnostics
+        if: always()
+        run: |
+          mkdir -p temp/onprem-smoke
+          docker compose -f track_2b/compose.yaml -f track_2b/compose.onprem.yaml logs --no-color --tail 120 > temp/onprem-smoke/containers.log 2>&1 || true
+          docker stats --no-stream --format '{{json .}}' > temp/onprem-smoke/resources.jsonl || true
+          docker compose -f track_2b/compose.yaml -f track_2b/compose.onprem.yaml ps -a > temp/onprem-smoke/containers.txt || true
+          if [ -f temp/onprem-smoke/summary.md ]; then cat temp/onprem-smoke/summary.md >> "$GITHUB_STEP_SUMMARY"; fi
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: apertus-onprem-smoke
+          path: temp/onprem-smoke/
+          retention-days: 14
+
+      - name: Stop the stack
+        if: always()
+        run: make stop

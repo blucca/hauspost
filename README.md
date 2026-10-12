@@ -1,60 +1,65 @@
-# Hack Apertus — project template
+# HausPost
 
-Template repository for [Hack Apertus](https://hackapertus.ch/) submissions.
-Every project keeps almost the same layout, so organizers and judges find the
-same things in the same place.
+**A clear brief for the next visit.**
 
-## Select your track
+A tenant says the tap is fixed, the doorbell is still broken, and Wednesday’s visit has moved to Friday. HausPost separates those updates, links each detail to the original words, and helps a property coordinator prepare the right repair brief or follow-up question.
 
-This repository holds one example project per track:
+[Open the example desk](https://blucca.github.io/hauspost/) · [Deployment](track_2b/docs/deployment.md) · [Technical report](track_2b/technical_report.md)
 
-- `track_1a/`
-- `track_1b/`
-- `track_2a/`
-- `track_2b/`
+## Use the desk
 
-Keep the directory for the track you are competing in **exactly as it is** —
-don't rename it or move its files — and delete the other track directories.
-That directory is your project root. Keep the files and directories as shown
-below.
+1. Open a synthetic German, French, Italian, or English example, or paste a tenant thread into the running application.
+2. Apertus extracts the current repair, resolved issue, property, unit, and changed visiting window.
+3. Select a detail to highlight its source. Correct a broken source link or add a clearly labelled coordinator entry.
+4. Confirm the reviewed details. Missing information produces a clarification draft; a resolved update produces a closure reply.
+5. Copy or download the internal brief and the tenant-language reply. Appointment windows stay **requested / awaiting confirmation**.
 
-## The structure
+The public example desk runs locally in the browser. Author-written examples and recorded model outputs have separate labels. The application’s live mode calls the operator-configured Apertus endpoint.
 
-| Path | What it is |
-| --- | --- |
-| `README.md` | The challenge description and submission requirements for your track |
-| `technical_report.md` | The deeper write-up: architecture, evaluation, limitations |
-| `Makefile` | `make run` must spin up your project |
-| `src/` | Your code |
-| `data/` | Datasets — `track_1a`, `track_2a` and `track_2b` only; max. 100 MB |
-| `findings/` | Issue files — `track_1a` only |
-| `docs/` | Diagrams, notes, longer write-ups |
+## Run HausPost
 
-## Run it
+Requires Docker with Compose v2. The full CPU profile needs **8 GiB RAM, 8 GiB free disk, and 4 CPU threads**. Run from either the repository root or `track_2b/`:
 
-Judges run `make run` from the root of the project, on a clean checkout:
-
-```bash
+```sh
 make run
+# Open http://127.0.0.1:4377
+make stop
 ```
 
-`make run` is expected to run the project using Docker, since that
-is how the judges will run it.
-- If you used other local open-weight models, include instructions for running the project in your technical report.
-- Use the following environment variables:
-```
-LLM_NAME — name and version of the model
-LLM_BASE_URL — endpoint base URL
-LLM_API_KEY — your API key
+The first launch obtains a pinned **Apertus v1.5 8B Q4_K_M** model directly from its Hugging Face publisher, then starts the application and llama.cpp on an internal Docker network. The model download is 5.06 GB. Dependencies and their licences, including the Apertus usage policy, are listed in the [deployment guide](track_2b/docs/deployment.md). Model weights stay in your local `track_2b/models/` directory.
+
+For the lightweight example workflow:
+
+```sh
+make demo
 ```
 
-## Getting started
+For an existing OpenAI-compatible Apertus service:
 
-1. Click **Use this template** to create your own repository.
-2. Delete the other track directories. Don't rename or restructure yours.
-3. Read its `README.md` and fill in `technical_report.md`.
-4. Make `make run` work from the root of the project, on a clean checkout.
+```sh
+cp track_2b/.env.example track_2b/.env
+# Set LLM_BASE_URL, LLM_NAME and, for authenticated services, LLM_API_KEY.
+make hosted
+```
 
-## License
+The hosted profile sends the message to the configured service. The on-prem profile keeps inference between the organisation-managed application and model containers. Build and model provisioning are separate from runtime.
 
-All Hack Apertus projects are open-sourced. Please check our Terms & Conditions for specific licensing details (6. What you build is open source): https://hackapertus.ch/terms-and-conditions
+## Checks and evaluation
+
+```sh
+PYTHONDONTWRITEBYTECODE=1 python track_2b/tests/check.py
+```
+
+The repository includes six small, synthetic cases with explicit expected fields. They cover four languages, stale quoted repairs, missing unit numbers, conflicting visit times, and instruction-like text inside an email. [Data notes](track_2b/data/README.md) distinguish author annotations from measured model results.
+
+The manual **Apertus on-prem smoke** GitHub Actions workflow runs the real model and application Docker stack on a public Linux runner, analyses a new German thread, and saves its raw response, source checks, runtime, and resource snapshot. Results belong to the recorded run’s model, quantisation, hardware, and cases.
+
+## Scope
+
+HausPost handles short text threads about one property. The coordinator reviews the model’s interpretation and controls the handoff. Exact substring checks establish source locations; the coordinator checks what those passages mean. Longer histories, attachments, tenancy-law decisions, mailbox integration, and automatic dispatch are future product work.
+
+## Project and licences
+
+Started on **13 October 2026** for **Hack Apertus, Track 2B**, from the official project template. Participant and repository owner: **blucca**. The implementation, research, synthetic examples, and checks were produced with the Codex AI agent; the repository records that contribution openly.
+
+Application code: [Apache-2.0](LICENSE). Documentation: CC-BY-4.0. Synthetic data: CC0-1.0. Bundled fonts retain their OFL notices. Model weights are obtained separately under the publisher’s stated terms.
