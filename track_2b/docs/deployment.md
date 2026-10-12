@@ -42,6 +42,7 @@ The text-only model card and GGUF identify **Apache-2.0**. The publisher also pr
 ### Resource budget
 
 - Capacity target: **8 GiB host RAM**, 4 CPU threads and 8 GiB free disk space. A 16 GB machine provides additional operating-system headroom.
+- Provisioning container: **1 GiB RAM / 1 CPU** for the downloader and filesystem cache, released before the model starts.
 - Model container: **7 GiB RAM / 4 CPU** limit. Application: **512 MiB / 1 CPU** limit; the host shares CPU time between them.
 - Context: **4096 tokens**, one parallel slot, 256-token logical batch / 128-token physical batch, thinking disabled in the model's Jinja template.
 - Model-response deadline: **420 seconds** in the CPU on-prem profile; hosted development uses the application's 180-second default.

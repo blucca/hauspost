@@ -16,6 +16,7 @@ jobs:
       - name: Provision and start the real Apertus stack
         run: |
           mkdir -p temp/onprem-smoke
+          date -u +%s > temp/onprem-smoke/started-at.txt
           { uname -a; lscpu; free -h; df -h .; docker version --format '{{.Server.Version}}'; } > temp/onprem-smoke/host.txt
           make run
 
@@ -105,6 +106,7 @@ jobs:
           docker compose -f track_2b/compose.yaml -f track_2b/compose.onprem.yaml ps -a > temp/onprem-smoke/containers.txt || true
           app_id=$(docker compose -f track_2b/compose.yaml -f track_2b/compose.onprem.yaml ps -q app)
           if [ -n "$app_id" ]; then docker inspect --format '{{json .NetworkSettings.Ports}}' "$app_id" > temp/onprem-smoke/app-ports.json; fi
+          if [ -f temp/onprem-smoke/started-at.txt ]; then docker events --since "$(cat temp/onprem-smoke/started-at.txt)" --until "$(date -u +%s)" --filter type=container --filter event=oom --format '{{json .}}' > temp/onprem-smoke/oom-events.jsonl || true; fi
           if [ -f temp/onprem-smoke/summary.md ]; then cat temp/onprem-smoke/summary.md >> "$GITHUB_STEP_SUMMARY"; fi
 
       - uses: actions/upload-artifact@v4
