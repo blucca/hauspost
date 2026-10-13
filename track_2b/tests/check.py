@@ -20,6 +20,9 @@ assert review["fields"]["requested_visit"]["value"] is None
 assert all(field["evidence_status"] == "matched" for field in review["fields"].values() if field["value"])
 empty = app.parse_model_output('{"language":"de","fields":{"apartment":{"value":"null","quote":null}}}', "Address")
 assert empty["fields"]["apartment"]["value"] is None
+mismatch = app.parse_model_output('{"language":"en","fields":{"apartment":{"value":"99Z","quote":"Apartment 4B"}}}', 'Apartment 4B')
+assert mismatch["fields"]["apartment"]["evidence_status"] == 'value_mismatch'
+assert mismatch["fields"]["apartment"]["start"] == 0
 
 source = "📨 Bonjour.\nLe chauffage est réparé.\nFuite encore active.\nVendredi 09:00\nVendredi 09:00"
 payload = {"language": "fr", "fields": {

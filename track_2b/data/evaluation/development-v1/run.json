@@ -1,0 +1,7 @@
+{
+  "run_url": "https://github.com/blucca/hauspost/actions/runs/38326610654",
+  "commit": "3a92887fba824528a59eb45a3a013e49b008c655",
+  "label": "JSON-object prompt development baseline",
+  "model": "Apertus v1.5 8B Q4_K_M",
+  "review": "Independent Codex agent semantic review of the six public synthetic development cases. Input and expected data appear in ../cases.json."
+}

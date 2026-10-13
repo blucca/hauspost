@@ -21,19 +21,22 @@ function announce(message = '', error = false) {
   $('notice').classList.toggle('error', error);
 }
 
-function locate(value, quote, operator = false) {
+function locate(value, quote, operator = false, key = '') {
   if (!value) return {value:null, quote:quote || null, start:null, end:null, evidence_status:'missing'};
   if (operator) return {value, quote:null, start:null, end:null, evidence_status:'operator'};
   const start = quote ? state.text.indexOf(quote) : -1;
-  const status = start < 0 ? 'unmatched' : state.text.indexOf(quote, start + 1) >= 0 ? 'ambiguous' : 'matched';
-  return {value, quote:quote || null, start:status === 'matched' ? start : null, end:status === 'matched' ? start + quote.length : null, evidence_status:status};
+  let status = start < 0 ? 'unmatched' : state.text.indexOf(quote, start + 1) >= 0 ? 'ambiguous' : 'matched';
+  const normalize = text => text.trim().replace(/\s+/gu, ' ').toLowerCase();
+  const located = status === 'matched';
+  if (located && ['property_address','apartment','contact_name'].includes(key) && !normalize(quote).includes(normalize(value))) status = 'value_mismatch';
+  return {value, quote:quote || null, start:located ? start : null, end:located ? start + quote.length : null, evidence_status:status};
 }
 
 function acceptResult(result, origin) {
   state.result = {...result, origin, fields:{}};
   for (const key of Object.keys(FIELD_NAMES)) {
     const field = result.fields?.[key] || {};
-    state.result.fields[key] = locate(field.value, field.quote);
+    state.result.fields[key] = locate(field.value, field.quote, false, key);
   }
   state.approved.clear();
   state.field = 'active_issue';
@@ -98,6 +101,7 @@ function renderFields() {
     const detail = node('div');
     const label = node('button', 'field-name', name);
     label.type = 'button';
+    label.setAttribute('aria-label', name);
     label.addEventListener('click', () => {
       state.field = key;
       state.editing = false;
@@ -109,7 +113,7 @@ function renderFields() {
     detail.append(label);
     const missingText = key === 'apartment' ? 'Ask for the apartment number' : key === 'active_issue' ? state.result.fields.resolved_issue.value ? 'Tenant reports the issue resolved' : 'General correspondence for review' : key === 'requested_visit' ? 'Arrange a time with the tenant' : 'Empty in this thread';
     detail.append(node('p', `field-value${field.value ? '' : ' missing'}`, field.value || missingText));
-    const proofLabels = {matched:'Exact passage found', unmatched:'Source passage needs correction', ambiguous:'Passage occurs more than once', missing:field.quote ? 'Conflicting or incomplete information' : 'Detail to be supplied', operator:'Coordinator entry'};
+    const proofLabels = {matched:'Exact passage found', unmatched:'Source passage needs correction', ambiguous:'Passage occurs more than once', value_mismatch:'Value needs a matching source', missing:field.quote ? 'Conflicting or incomplete information' : 'Detail to be supplied', operator:'Coordinator entry'};
     if (field.value || field.quote || key === 'apartment') detail.append(node('p', `field-proof ${field.evidence_status}`, proofLabels[field.evidence_status]));
     const controls = node('div', 'field-controls');
     const edit = node('button', '', field.value ? 'Edit' : 'Add');
@@ -161,7 +165,7 @@ function renderReview() {
   $('confirmAll').disabled = !entries.some(([key, field]) => !state.approved.has(key) && ['matched','operator'].includes(field.evidence_status));
   $('handoffButton').disabled = remaining > 0 || badSources.length > 0 || entries.length === 0;
   $('handoffButton').textContent = {repair:'Create repair brief', clarification:'Draft clarification', closure:'Draft closure reply', general:'Create routing note'}[type];
-  $('handoffHint').textContent = badSources.length ? 'Attach an exact source passage to each flagged detail.' : remaining ? 'Read the source highlights, then confirm the populated details.' : type === 'clarification' ? 'The reply asks for missing information. Visit requests stay unconfirmed.' : type === 'closure' ? 'Prepare a reply acknowledging the tenant’s resolved update.' : type === 'general' ? 'Prepare the original message for your property administration inbox.' : 'Create a copy-ready brief. Confirm the appointment in your own system.';
+  $('handoffHint').textContent = badSources.length ? 'Attach an exact source passage to each flagged detail.' : remaining ? 'Read the whole message for omissions, check each value against its highlight, then confirm.' : type === 'clarification' ? 'The reply asks for missing information. Visit requests stay unconfirmed.' : type === 'closure' ? 'Prepare a reply acknowledging the tenant’s resolved update.' : type === 'general' ? 'Prepare the original message for your property administration inbox.' : 'Create a copy-ready brief. Confirm the appointment in your own system.';
   $('attention').classList.toggle('ready', !badSources.length && !missing.length);
   $('attentionText').textContent = badSources.length ? `${badSources.length} source ${badSources.length === 1 ? 'link needs' : 'links need'} attention before handoff.` : missing.length ? `Still needed: ${missing.map(key => ({active_issue:'current fault', property_address:'property address', apartment:'apartment number', requested_visit:'a clear visiting window'})[key]).join(', ')}.` : type === 'closure' ? 'Resolved update. Prepare a closure reply for review.' : type === 'general' ? 'General correspondence. Review for your administration inbox.' : 'Address and current repair are present. Review for handoff.';
 }
@@ -308,9 +312,9 @@ $('editForm').addEventListener('submit', event => {
   event.preventDefault();
   const value = $('fieldValue').value.trim();
   const quote = $('fieldQuote').value.trim();
-  const field = locate(value || null, quote || null, $('operatorEntry').checked);
+  const field = locate(value || null, quote || null, $('operatorEntry').checked, state.field);
   if (value && !['matched','operator'].includes(field.evidence_status)) {
-    $('editError').textContent = field.evidence_status === 'ambiguous' ? 'This passage appears more than once. Include a longer, unique passage.' : 'Paste one exact passage from the message, or mark this as your own information.';
+    $('editError').textContent = field.evidence_status === 'ambiguous' ? 'This passage appears more than once. Include a longer, unique passage.' : field.evidence_status === 'value_mismatch' ? 'Use the address, unit or name found in this passage, or add your own information.' : 'Paste one exact passage from the message, or mark this as your own information.';
     return;
   }
   state.result.fields[state.field] = field;

@@ -23,6 +23,7 @@ DEFAULT_MODEL_TIMEOUT = 180
 MODEL_LOCK = threading.Lock()
 FIELDS = ("active_issue", "resolved_issue", "property_address", "apartment",
           "requested_visit", "cancelled_visit", "contact_name")
+COPIED_FIELDS = ("property_address", "apartment", "contact_name")
 FIELD_SCHEMA = {"type": "object", "additionalProperties": False,
                 "properties": {"value": {"type": ["string", "null"]},
                                "quote": {"type": ["string", "null"]}},
@@ -181,6 +182,9 @@ def parse_model_output(raw, source):
                     status = "matched"
                     start = len(source[:index].encode("utf-16-le")) // 2
                     end = start + len(quote.encode("utf-16-le")) // 2
+                    if (name in COPIED_FIELDS
+                            and " ".join(value.split()).lower() not in " ".join(quote.split()).lower()):
+                        status = "value_mismatch"
         result["fields"][name] = {"value": value, "quote": quote, "start": start,
                                   "end": end, "evidence_status": status}
     return result

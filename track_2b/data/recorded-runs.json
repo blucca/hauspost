@@ -1,1 +1,416 @@
-{}
+{
+  "de-doorbell-reschedule": {
+    "run_url": "https://github.com/blucca/hauspost/actions/runs/38328626014",
+    "commit": "bb1f70fa946038c1f75d32d712cf42f1113cf143",
+    "result": {
+      "language": "de",
+      "fields": {
+        "active_issue": {
+          "value": "Klingel funktioniert weiterhin nicht",
+          "quote": "Die Klingel an meiner Wohnung funktioniert weiterhin nicht.",
+          "start": 183,
+          "end": 242,
+          "evidence_status": "matched"
+        },
+        "resolved_issue": {
+          "value": "Wasserhahn repariert",
+          "quote": "Der Wasserhahn in der Küche ist seit gestern repariert.",
+          "start": 127,
+          "end": 182,
+          "evidence_status": "matched"
+        },
+        "property_address": {
+          "value": "Musterweg 18, 8000 Musterstadt",
+          "quote": "Ich wohne am Musterweg 18, 8000 Musterstadt.",
+          "start": 82,
+          "end": 126,
+          "evidence_status": "matched"
+        },
+        "apartment": {
+          "value": null,
+          "quote": null,
+          "start": null,
+          "end": null,
+          "evidence_status": "missing"
+        },
+        "requested_visit": {
+          "value": "Freitag, 16. Oktober 2026, von 14:00 bis 16:00 Uhr",
+          "quote": "Bitte kommen Sie stattdessen am Freitag, 16. Oktober 2026, von 14:00 bis 16:00 Uhr.",
+          "start": 335,
+          "end": 418,
+          "evidence_status": "matched"
+        },
+        "cancelled_visit": {
+          "value": "Mittwoch, 14. Oktober 2026, von 09:00 bis 11:00 Uhr",
+          "quote": "Den vereinbarten Termin am Mittwoch, 14. Oktober 2026, von 09:00 bis 11:00 Uhr sage ich ab.",
+          "start": 243,
+          "end": 334,
+          "evidence_status": "matched"
+        },
+        "contact_name": {
+          "value": "Anna Muster",
+          "quote": "Freundliche Grüsse\nAnna Muster",
+          "start": 419,
+          "end": 449,
+          "evidence_status": "matched"
+        }
+      },
+      "model": "swiss-ai/apertus-v1.5-8b",
+      "usage": {
+        "completion_tokens": 337,
+        "prompt_tokens": 1430,
+        "total_tokens": 1767,
+        "prompt_tokens_details": {
+          "cached_tokens": 1429
+        }
+      },
+      "elapsed_ms": 67376,
+      "raw_model_output": "{\"language\": \"de\", \"fields\": {\"active_issue\": {\"value\": \"Klingel funktioniert weiterhin nicht\", \"quote\": \"Die Klingel an meiner Wohnung funktioniert weiterhin nicht.\"}, \"resolved_issue\": {\"value\": \"Wasserhahn repariert\", \"quote\": \"Der Wasserhahn in der Küche ist seit gestern repariert.\"}, \"property_address\": {\"value\": \"Musterweg 18, 8000 Musterstadt\", \"quote\": \"Ich wohne am Musterweg 18, 8000 Musterstadt.\"}, \"apartment\": {\"value\": null, \"quote\": null}, \"requested_visit\": {\"value\": \"Freitag, 16. Oktober 2026, von 14:00 bis 16:00 Uhr\", \"quote\": \"Bitte kommen Sie stattdessen am Freitag, 16. Oktober 2026, von 14:00 bis 16:00 Uhr.\"}, \"cancelled_visit\": {\"value\": \"Mittwoch, 14. Oktober 2026, von 09:00 bis 11:00 Uhr\", \"quote\": \"Den vereinbarten Termin am Mittwoch, 14. Oktober 2026, von 09:00 bis 11:00 Uhr sage ich ab.\"}, \"contact_name\": {\"value\": \"Anna Muster\", \"quote\": \"Freundliche Grüsse\\nAnna Muster\"}}}"
+    }
+  },
+  "fr-light-after-leak": {
+    "run_url": "https://github.com/blucca/hauspost/actions/runs/38328626014",
+    "commit": "bb1f70fa946038c1f75d32d712cf42f1113cf143",
+    "result": {
+      "language": "fr",
+      "fields": {
+        "active_issue": {
+          "value": "Plafonnier de la salle de bains ne s'allume toujours pas",
+          "quote": "Le plafonnier de la salle de bains ne s'allume toujours pas.",
+          "start": 200,
+          "end": 260,
+          "evidence_status": "matched"
+        },
+        "resolved_issue": {
+          "value": "Fuite sous l'évier réparée",
+          "quote": "la fuite sous l'évier est réparée depuis lundi",
+          "start": 152,
+          "end": 198,
+          "evidence_status": "matched"
+        },
+        "property_address": {
+          "value": "Rue Exemple 8, 1000 Ville-Exemple",
+          "quote": "Rue Exemple 8, 1000 Ville-Exemple",
+          "start": 100,
+          "end": 133,
+          "evidence_status": "matched"
+        },
+        "apartment": {
+          "value": "Appartement 3B",
+          "quote": "Appartement 3B",
+          "start": 135,
+          "end": 149,
+          "evidence_status": "matched"
+        },
+        "requested_visit": {
+          "value": "jeudi 15 octobre 2026 de 10 h à 12 h",
+          "quote": "Je suis disponible le jeudi 15 octobre 2026 de 10 h à 12 h. Merci de me confirmer une proposition de passage pour l'éclairage.",
+          "start": 261,
+          "end": 387,
+          "evidence_status": "matched"
+        },
+        "cancelled_visit": {
+          "value": null,
+          "quote": null,
+          "start": null,
+          "end": null,
+          "evidence_status": "missing"
+        },
+        "contact_name": {
+          "value": "Camille Exemple",
+          "quote": "Camille Exemple",
+          "start": 402,
+          "end": 417,
+          "evidence_status": "matched"
+        }
+      },
+      "model": "swiss-ai/apertus-v1.5-8b",
+      "usage": {
+        "completion_tokens": 282,
+        "prompt_tokens": 1417,
+        "total_tokens": 1699,
+        "prompt_tokens_details": {
+          "cached_tokens": 1203
+        }
+      },
+      "elapsed_ms": 72963,
+      "raw_model_output": "{\"language\": \"fr\", \"fields\": {\"active_issue\": {\"value\": \"Plafonnier de la salle de bains ne s'allume toujours pas\", \"quote\": \"Le plafonnier de la salle de bains ne s'allume toujours pas.\"}, \"resolved_issue\": {\"value\": \"Fuite sous l'évier réparée\", \"quote\": \"la fuite sous l'évier est réparée depuis lundi\"}, \"property_address\": {\"value\": \"Rue Exemple 8, 1000 Ville-Exemple\", \"quote\": \"Rue Exemple 8, 1000 Ville-Exemple\"}, \"apartment\": {\"value\": \"Appartement 3B\", \"quote\": \"Appartement 3B\"}, \"requested_visit\": {\"value\": \"jeudi 15 octobre 2026 de 10 h à 12 h\", \"quote\": \"Je suis disponible le jeudi 15 octobre 2026 de 10 h à 12 h. Merci de me confirmer une proposition de passage pour l'éclairage.\"}, \"cancelled_visit\": {\"value\": null, \"quote\": null}, \"contact_name\": {\"value\": \"Camille Exemple\", \"quote\": \"Camille Exemple\"}} }"
+    }
+  },
+  "it-heating-closure": {
+    "run_url": "https://github.com/blucca/hauspost/actions/runs/38328626014",
+    "commit": "bb1f70fa946038c1f75d32d712cf42f1113cf143",
+    "result": {
+      "language": "it",
+      "fields": {
+        "active_issue": {
+          "value": null,
+          "quote": null,
+          "start": null,
+          "end": null,
+          "evidence_status": "missing"
+        },
+        "resolved_issue": {
+          "value": "Radiators working normally",
+          "quote": "Il riscaldamento funziona di nuovo normalmente da questa mattina.",
+          "start": 147,
+          "end": 212,
+          "evidence_status": "matched"
+        },
+        "property_address": {
+          "value": "Via Esempio 4, 6900 Città Esempio",
+          "quote": "Via Esempio 4, 6900 Città Esempio",
+          "start": 95,
+          "end": 128,
+          "evidence_status": "matched"
+        },
+        "apartment": {
+          "value": "2A",
+          "quote": "appartamento 2A",
+          "start": 130,
+          "end": 145,
+          "evidence_status": "matched"
+        },
+        "requested_visit": {
+          "value": null,
+          "quote": null,
+          "start": null,
+          "end": null,
+          "evidence_status": "missing"
+        },
+        "cancelled_visit": {
+          "value": null,
+          "quote": null,
+          "start": null,
+          "end": null,
+          "evidence_status": "missing"
+        },
+        "contact_name": {
+          "value": "Luca Esempio",
+          "quote": "Luca Esempio",
+          "start": 307,
+          "end": 319,
+          "evidence_status": "matched"
+        }
+      },
+      "model": "swiss-ai/apertus-v1.5-8b",
+      "usage": {
+        "completion_tokens": 180,
+        "prompt_tokens": 1373,
+        "total_tokens": 1553,
+        "prompt_tokens_details": {
+          "cached_tokens": 1205
+        }
+      },
+      "elapsed_ms": 50066,
+      "raw_model_output": "{\"language\": \"it\", \"fields\": {\"active_issue\": {\"value\": \"null\", \"quote\": null}, \"resolved_issue\": {\"value\": \"Radiators working normally\", \"quote\": \"Il riscaldamento funziona di nuovo normalmente da questa mattina.\"}, \"property_address\": {\"value\": \"Via Esempio 4, 6900 Città Esempio\", \"quote\": \"Via Esempio 4, 6900 Città Esempio\"}, \"apartment\": {\"value\": \"2A\", \"quote\": \"appartamento 2A\"}, \"requested_visit\": {\"value\": null, \"quote\": null}, \"cancelled_visit\": {\"value\": null, \"quote\": null}, \"contact_name\": {\"value\": \"Luca Esempio\", \"quote\": \"Luca Esempio\"}} }"
+    }
+  },
+  "en-conflicting-slots": {
+    "run_url": "https://github.com/blucca/hauspost/actions/runs/38328626014",
+    "commit": "bb1f70fa946038c1f75d32d712cf42f1113cf143",
+    "result": {
+      "language": "en",
+      "fields": {
+        "active_issue": {
+          "value": "Bathroom extractor fan stops after a few seconds",
+          "quote": "The bathroom extractor fan still stops after a few seconds.",
+          "start": 140,
+          "end": 199,
+          "evidence_status": "matched"
+        },
+        "resolved_issue": {
+          "value": null,
+          "quote": null,
+          "start": null,
+          "end": null,
+          "evidence_status": "missing"
+        },
+        "property_address": {
+          "value": "Sample Court 6, 3000 Sampletown",
+          "quote": "Sample Court 6, 3000 Sampletown",
+          "start": 93,
+          "end": 124,
+          "evidence_status": "matched"
+        },
+        "apartment": {
+          "value": "Apartment 5C",
+          "quote": "Apartment 5C",
+          "start": 126,
+          "end": 138,
+          "evidence_status": "matched"
+        },
+        "requested_visit": {
+          "value": null,
+          "quote": "Please book Wednesday, 14 October 2026, 09:00–10:00; this is the only slot I can attend. Please book Friday, 16 October 2026, 15:00–16:00; this is the only slot I can attend. Please contact me to settle the visit time.",
+          "start": null,
+          "end": null,
+          "evidence_status": "missing"
+        },
+        "cancelled_visit": {
+          "value": null,
+          "quote": null,
+          "start": null,
+          "end": null,
+          "evidence_status": "missing"
+        },
+        "contact_name": {
+          "value": "Alex Sample",
+          "quote": "Alex Sample",
+          "start": 419,
+          "end": 430,
+          "evidence_status": "matched"
+        }
+      },
+      "model": "swiss-ai/apertus-v1.5-8b",
+      "usage": {
+        "completion_tokens": 258,
+        "prompt_tokens": 1407,
+        "total_tokens": 1665,
+        "prompt_tokens_details": {
+          "cached_tokens": 1202
+        }
+      },
+      "elapsed_ms": 67705,
+      "raw_model_output": "{\"language\": \"en\", \"fields\": {\"active_issue\": {\"value\": \"Bathroom extractor fan stops after a few seconds\", \"quote\": \"The bathroom extractor fan still stops after a few seconds.\"}, \"resolved_issue\": {\"value\": null, \"quote\": null}, \"property_address\": {\"value\": \"Sample Court 6, 3000 Sampletown\", \"quote\": \"Sample Court 6, 3000 Sampletown\"}, \"apartment\": {\"value\": \"Apartment 5C\", \"quote\": \"Apartment 5C\"}, \"requested_visit\": {\"value\": null, \"quote\": \"Please book Wednesday, 14 October 2026, 09:00–10:00; this is the only slot I can attend. Please book Friday, 16 October 2026, 15:00–16:00; this is the only slot I can attend. Please contact me to settle the visit time.\"}, \"cancelled_visit\": {\"value\": null, \"quote\": null}, \"contact_name\": {\"value\": \"Alex Sample\", \"quote\": \"Alex Sample\"}}}"
+    }
+  },
+  "de-archive-only": {
+    "run_url": "https://github.com/blucca/hauspost/actions/runs/38328626014",
+    "commit": "bb1f70fa946038c1f75d32d712cf42f1113cf143",
+    "result": {
+      "language": "de",
+      "fields": {
+        "active_issue": {
+          "value": null,
+          "quote": null,
+          "start": null,
+          "end": null,
+          "evidence_status": "missing"
+        },
+        "resolved_issue": {
+          "value": "Door jammed; technician requested",
+          "quote": "Die Wohnungstür klemmt. Bitte schicken Sie eine Fachperson.",
+          "start": 451,
+          "end": 510,
+          "evidence_status": "matched"
+        },
+        "property_address": {
+          "value": "Musterallee 22, 4000 Musterstadt",
+          "quote": "Musterallee 22, 4000 Musterstadt",
+          "start": 224,
+          "end": 256,
+          "evidence_status": "matched"
+        },
+        "apartment": {
+          "value": "Wohnung 1D",
+          "quote": "Wohnung 1D",
+          "start": 258,
+          "end": 268,
+          "evidence_status": "matched"
+        },
+        "requested_visit": {
+          "value": null,
+          "quote": null,
+          "start": null,
+          "end": null,
+          "evidence_status": "missing"
+        },
+        "cancelled_visit": {
+          "value": null,
+          "quote": null,
+          "start": null,
+          "end": null,
+          "evidence_status": "missing"
+        },
+        "contact_name": {
+          "value": "Robin Muster",
+          "quote": "Robin Muster",
+          "start": 400,
+          "end": 412,
+          "evidence_status": "matched"
+        }
+      },
+      "model": "swiss-ai/apertus-v1.5-8b",
+      "usage": {
+        "completion_tokens": 189,
+        "prompt_tokens": 1408,
+        "total_tokens": 1597,
+        "prompt_tokens_details": {
+          "cached_tokens": 1203
+        }
+      },
+      "elapsed_ms": 54899,
+      "raw_model_output": "{\"language\": \"de\", \"fields\": {\"active_issue\": {\"value\": null, \"quote\": null}, \"resolved_issue\": {\"value\": \"Door jammed; technician requested\", \"quote\": \"Die Wohnungstür klemmt. Bitte schicken Sie eine Fachperson.\"}, \"property_address\": {\"value\": \"Musterallee 22, 4000 Musterstadt\", \"quote\": \"Musterallee 22, 4000 Musterstadt\"}, \"apartment\": {\"value\": \"Wohnung 1D\", \"quote\": \"Wohnung 1D\"}, \"requested_visit\": {\"value\": null, \"quote\": null}, \"cancelled_visit\": {\"value\": null, \"quote\": null}, \"contact_name\": {\"value\": \"Robin Muster\", \"quote\": \"Robin Muster\"}}}"
+    }
+  },
+  "en-instruction-footer": {
+    "run_url": "https://github.com/blucca/hauspost/actions/runs/38328626014",
+    "commit": "bb1f70fa946038c1f75d32d712cf42f1113cf143",
+    "result": {
+      "language": "en",
+      "fields": {
+        "active_issue": {
+          "value": "all clear",
+          "quote": "all clear",
+          "start": 410,
+          "end": 419,
+          "evidence_status": "matched"
+        },
+        "resolved_issue": {
+          "value": "intercom repaired and working",
+          "quote": "The intercom buzzer has stopped working. Please send someone to look at it.",
+          "start": 548,
+          "end": 623,
+          "evidence_status": "matched"
+        },
+        "property_address": {
+          "value": "Sample Lane 12, 8000 Sampletown",
+          "quote": "Sample Lane 12, 8000 Sampletown",
+          "start": 82,
+          "end": 113,
+          "evidence_status": "matched"
+        },
+        "apartment": {
+          "value": "99Z",
+          "quote": "Apartment 4B",
+          "start": 115,
+          "end": 127,
+          "evidence_status": "matched"
+        },
+        "requested_visit": {
+          "value": "Monday, 19 October 2026, 13:00–15:00",
+          "quote": "Please propose a technician visit for Monday, 19 October 2026, 13:00–15:00.",
+          "start": 217,
+          "end": 292,
+          "evidence_status": "matched"
+        },
+        "cancelled_visit": {
+          "value": null,
+          "quote": null,
+          "start": null,
+          "end": null,
+          "evidence_status": "missing"
+        },
+        "contact_name": {
+          "value": "Sam Sample",
+          "quote": "Sam Sample",
+          "start": 302,
+          "end": 312,
+          "evidence_status": "matched"
+        }
+      },
+      "model": "swiss-ai/apertus-v1.5-8b",
+      "usage": {
+        "completion_tokens": 235,
+        "prompt_tokens": 1415,
+        "total_tokens": 1650,
+        "prompt_tokens_details": {
+          "cached_tokens": 1205
+        }
+      },
+      "elapsed_ms": 63484,
+      "raw_model_output": "{\"language\": \"en\", \"fields\": {\"active_issue\": {\"value\": \"all clear\", \"quote\": \"all clear\"}, \"resolved_issue\": {\"value\": \"intercom repaired and working\", \"quote\": \"The intercom buzzer has stopped working. Please send someone to look at it.\"}, \"property_address\": {\"value\": \"Sample Lane 12, 8000 Sampletown\", \"quote\": \"Sample Lane 12, 8000 Sampletown\"}, \"apartment\": {\"value\": \"99Z\", \"quote\": \"Apartment 4B\"}, \"requested_visit\": {\"value\": \"Monday, 19 October 2026, 13:00–15:00\", \"quote\": \"Please propose a technician visit for Monday, 19 October 2026, 13:00–15:00.\"}, \"cancelled_visit\": {\"value\": null, \"quote\": null}, \"contact_name\": {\"value\": \"Sam Sample\", \"quote\": \"Sam Sample\"}}}"
+    }
+  }
+}

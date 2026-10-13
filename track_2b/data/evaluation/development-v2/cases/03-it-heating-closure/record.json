@@ -1,0 +1,81 @@
+{
+  "id": "it-heating-closure",
+  "expected_language": "it",
+  "expected_missing_fields": [],
+  "status": "completed",
+  "http_status": 200,
+  "http_attempted": true,
+  "error": null,
+  "metrics": {
+    "language_match": true,
+    "active_presence_match": true,
+    "resolved_presence_match": true,
+    "expected_missing_match": true,
+    "matched_source_count": 4,
+    "valued_field_count": 4
+  },
+  "directory": "03-it-heating-closure",
+  "fields": {
+    "active_issue": {
+      "value": null,
+      "quote": null,
+      "start": null,
+      "end": null,
+      "evidence_status": "missing"
+    },
+    "resolved_issue": {
+      "value": "Radiators working normally",
+      "quote": "Il riscaldamento funziona di nuovo normalmente da questa mattina.",
+      "start": 147,
+      "end": 212,
+      "evidence_status": "matched"
+    },
+    "property_address": {
+      "value": "Via Esempio 4, 6900 Città Esempio",
+      "quote": "Via Esempio 4, 6900 Città Esempio",
+      "start": 95,
+      "end": 128,
+      "evidence_status": "matched"
+    },
+    "apartment": {
+      "value": "2A",
+      "quote": "appartamento 2A",
+      "start": 130,
+      "end": 145,
+      "evidence_status": "matched"
+    },
+    "requested_visit": {
+      "value": null,
+      "quote": null,
+      "start": null,
+      "end": null,
+      "evidence_status": "missing"
+    },
+    "cancelled_visit": {
+      "value": null,
+      "quote": null,
+      "start": null,
+      "end": null,
+      "evidence_status": "missing"
+    },
+    "contact_name": {
+      "value": "Luca Esempio",
+      "quote": "Luca Esempio",
+      "start": 307,
+      "end": 319,
+      "evidence_status": "matched"
+    }
+  },
+  "model": "swiss-ai/apertus-v1.5-8b",
+  "usage": {
+    "completion_tokens": 180,
+    "prompt_tokens": 1373,
+    "total_tokens": 1553,
+    "prompt_tokens_details": {
+      "cached_tokens": 1205
+    }
+  },
+  "model_elapsed_ms": 50066,
+  "language": "it",
+  "elapsed_ms": 50068
+}

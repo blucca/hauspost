@@ -1,0 +1,495 @@
+{
+  "case_count": 6,
+  "cases": [
+    {
+      "id": "de-doorbell-reschedule",
+      "expected_language": "de",
+      "expected_missing_fields": [
+        "apartment"
+      ],
+      "status": "completed",
+      "http_status": 200,
+      "http_attempted": true,
+      "error": null,
+      "metrics": {
+        "language_match": true,
+        "active_presence_match": true,
+        "resolved_presence_match": true,
+        "expected_missing_match": true,
+        "matched_source_count": 6,
+        "valued_field_count": 6
+      },
+      "directory": "01-de-doorbell-reschedule",
+      "fields": {
+        "active_issue": {
+          "value": "Klingel funktioniert weiterhin nicht",
+          "quote": "Die Klingel an meiner Wohnung funktioniert weiterhin nicht.",
+          "start": 183,
+          "end": 242,
+          "evidence_status": "matched"
+        },
+        "resolved_issue": {
+          "value": "Wasserhahn repariert",
+          "quote": "Der Wasserhahn in der Küche ist seit gestern repariert.",
+          "start": 127,
+          "end": 182,
+          "evidence_status": "matched"
+        },
+        "property_address": {
+          "value": "Musterweg 18, 8000 Musterstadt",
+          "quote": "Ich wohne am Musterweg 18, 8000 Musterstadt.",
+          "start": 82,
+          "end": 126,
+          "evidence_status": "matched"
+        },
+        "apartment": {
+          "value": null,
+          "quote": null,
+          "start": null,
+          "end": null,
+          "evidence_status": "missing"
+        },
+        "requested_visit": {
+          "value": "Freitag, 16. Oktober 2026, von 14:00 bis 16:00 Uhr",
+          "quote": "Bitte kommen Sie stattdessen am Freitag, 16. Oktober 2026, von 14:00 bis 16:00 Uhr.",
+          "start": 335,
+          "end": 418,
+          "evidence_status": "matched"
+        },
+        "cancelled_visit": {
+          "value": "Mittwoch, 14. Oktober 2026, von 09:00 bis 11:00 Uhr",
+          "quote": "Den vereinbarten Termin am Mittwoch, 14. Oktober 2026, von 09:00 bis 11:00 Uhr sage ich ab.",
+          "start": 243,
+          "end": 334,
+          "evidence_status": "matched"
+        },
+        "contact_name": {
+          "value": "Anna Muster",
+          "quote": "Freundliche Grüsse\nAnna Muster",
+          "start": 419,
+          "end": 449,
+          "evidence_status": "matched"
+        }
+      },
+      "model": "swiss-ai/apertus-v1.5-8b",
+      "usage": {
+        "completion_tokens": 337,
+        "prompt_tokens": 1430,
+        "total_tokens": 1767,
+        "prompt_tokens_details": {
+          "cached_tokens": 1429
+        }
+      },
+      "model_elapsed_ms": 67376,
+      "language": "de",
+      "elapsed_ms": 67398
+    },
+    {
+      "id": "fr-light-after-leak",
+      "expected_language": "fr",
+      "expected_missing_fields": [],
+      "status": "completed",
+      "http_status": 200,
+      "http_attempted": true,
+      "error": null,
+      "metrics": {
+        "language_match": true,
+        "active_presence_match": true,
+        "resolved_presence_match": true,
+        "expected_missing_match": true,
+        "matched_source_count": 6,
+        "valued_field_count": 6
+      },
+      "directory": "02-fr-light-after-leak",
+      "fields": {
+        "active_issue": {
+          "value": "Plafonnier de la salle de bains ne s'allume toujours pas",
+          "quote": "Le plafonnier de la salle de bains ne s'allume toujours pas.",
+          "start": 200,
+          "end": 260,
+          "evidence_status": "matched"
+        },
+        "resolved_issue": {
+          "value": "Fuite sous l'évier réparée",
+          "quote": "la fuite sous l'évier est réparée depuis lundi",
+          "start": 152,
+          "end": 198,
+          "evidence_status": "matched"
+        },
+        "property_address": {
+          "value": "Rue Exemple 8, 1000 Ville-Exemple",
+          "quote": "Rue Exemple 8, 1000 Ville-Exemple",
+          "start": 100,
+          "end": 133,
+          "evidence_status": "matched"
+        },
+        "apartment": {
+          "value": "Appartement 3B",
+          "quote": "Appartement 3B",
+          "start": 135,
+          "end": 149,
+          "evidence_status": "matched"
+        },
+        "requested_visit": {
+          "value": "jeudi 15 octobre 2026 de 10 h à 12 h",
+          "quote": "Je suis disponible le jeudi 15 octobre 2026 de 10 h à 12 h. Merci de me confirmer une proposition de passage pour l'éclairage.",
+          "start": 261,
+          "end": 387,
+          "evidence_status": "matched"
+        },
+        "cancelled_visit": {
+          "value": null,
+          "quote": null,
+          "start": null,
+          "end": null,
+          "evidence_status": "missing"
+        },
+        "contact_name": {
+          "value": "Camille Exemple",
+          "quote": "Camille Exemple",
+          "start": 402,
+          "end": 417,
+          "evidence_status": "matched"
+        }
+      },
+      "model": "swiss-ai/apertus-v1.5-8b",
+      "usage": {
+        "completion_tokens": 282,
+        "prompt_tokens": 1417,
+        "total_tokens": 1699,
+        "prompt_tokens_details": {
+          "cached_tokens": 1203
+        }
+      },
+      "model_elapsed_ms": 72963,
+      "language": "fr",
+      "elapsed_ms": 72967
+    },
+    {
+      "id": "it-heating-closure",
+      "expected_language": "it",
+      "expected_missing_fields": [],
+      "status": "completed",
+      "http_status": 200,
+      "http_attempted": true,
+      "error": null,
+      "metrics": {
+        "language_match": true,
+        "active_presence_match": true,
+        "resolved_presence_match": true,
+        "expected_missing_match": true,
+        "matched_source_count": 4,
+        "valued_field_count": 4
+      },
+      "directory": "03-it-heating-closure",
+      "fields": {
+        "active_issue": {
+          "value": null,
+          "quote": null,
+          "start": null,
+          "end": null,
+          "evidence_status": "missing"
+        },
+        "resolved_issue": {
+          "value": "Radiators working normally",
+          "quote": "Il riscaldamento funziona di nuovo normalmente da questa mattina.",
+          "start": 147,
+          "end": 212,
+          "evidence_status": "matched"
+        },
+        "property_address": {
+          "value": "Via Esempio 4, 6900 Città Esempio",
+          "quote": "Via Esempio 4, 6900 Città Esempio",
+          "start": 95,
+          "end": 128,
+          "evidence_status": "matched"
+        },
+        "apartment": {
+          "value": "2A",
+          "quote": "appartamento 2A",
+          "start": 130,
+          "end": 145,
+          "evidence_status": "matched"
+        },
+        "requested_visit": {
+          "value": null,
+          "quote": null,
+          "start": null,
+          "end": null,
+          "evidence_status": "missing"
+        },
+        "cancelled_visit": {
+          "value": null,
+          "quote": null,
+          "start": null,
+          "end": null,
+          "evidence_status": "missing"
+        },
+        "contact_name": {
+          "value": "Luca Esempio",
+          "quote": "Luca Esempio",
+          "start": 307,
+          "end": 319,
+          "evidence_status": "matched"
+        }
+      },
+      "model": "swiss-ai/apertus-v1.5-8b",
+      "usage": {
+        "completion_tokens": 180,
+        "prompt_tokens": 1373,
+        "total_tokens": 1553,
+        "prompt_tokens_details": {
+          "cached_tokens": 1205
+        }
+      },
+      "model_elapsed_ms": 50066,
+      "language": "it",
+      "elapsed_ms": 50068
+    },
+    {
+      "id": "en-conflicting-slots",
+      "expected_language": "en",
+      "expected_missing_fields": [
+        "requested_visit"
+      ],
+      "status": "completed",
+      "http_status": 200,
+      "http_attempted": true,
+      "error": null,
+      "metrics": {
+        "language_match": true,
+        "active_presence_match": true,
+        "resolved_presence_match": true,
+        "expected_missing_match": true,
+        "matched_source_count": 4,
+        "valued_field_count": 4
+      },
+      "directory": "04-en-conflicting-slots",
+      "fields": {
+        "active_issue": {
+          "value": "Bathroom extractor fan stops after a few seconds",
+          "quote": "The bathroom extractor fan still stops after a few seconds.",
+          "start": 140,
+          "end": 199,
+          "evidence_status": "matched"
+        },
+        "resolved_issue": {
+          "value": null,
+          "quote": null,
+          "start": null,
+          "end": null,
+          "evidence_status": "missing"
+        },
+        "property_address": {
+          "value": "Sample Court 6, 3000 Sampletown",
+          "quote": "Sample Court 6, 3000 Sampletown",
+          "start": 93,
+          "end": 124,
+          "evidence_status": "matched"
+        },
+        "apartment": {
+          "value": "Apartment 5C",
+          "quote": "Apartment 5C",
+          "start": 126,
+          "end": 138,
+          "evidence_status": "matched"
+        },
+        "requested_visit": {
+          "value": null,
+          "quote": "Please book Wednesday, 14 October 2026, 09:00–10:00; this is the only slot I can attend. Please book Friday, 16 October 2026, 15:00–16:00; this is the only slot I can attend. Please contact me to settle the visit time.",
+          "start": null,
+          "end": null,
+          "evidence_status": "missing"
+        },
+        "cancelled_visit": {
+          "value": null,
+          "quote": null,
+          "start": null,
+          "end": null,
+          "evidence_status": "missing"
+        },
+        "contact_name": {
+          "value": "Alex Sample",
+          "quote": "Alex Sample",
+          "start": 419,
+          "end": 430,
+          "evidence_status": "matched"
+        }
+      },
+      "model": "swiss-ai/apertus-v1.5-8b",
+      "usage": {
+        "completion_tokens": 258,
+        "prompt_tokens": 1407,
+        "total_tokens": 1665,
+        "prompt_tokens_details": {
+          "cached_tokens": 1202
+        }
+      },
+      "model_elapsed_ms": 67705,
+      "language": "en",
+      "elapsed_ms": 67707
+    },
+    {
+      "id": "de-archive-only",
+      "expected_language": "de",
+      "expected_missing_fields": [],
+      "status": "completed",
+      "http_status": 200,
+      "http_attempted": true,
+      "error": null,
+      "metrics": {
+        "language_match": true,
+        "active_presence_match": true,
+        "resolved_presence_match": false,
+        "expected_missing_match": true,
+        "matched_source_count": 4,
+        "valued_field_count": 4
+      },
+      "directory": "05-de-archive-only",
+      "fields": {
+        "active_issue": {
+          "value": null,
+          "quote": null,
+          "start": null,
+          "end": null,
+          "evidence_status": "missing"
+        },
+        "resolved_issue": {
+          "value": "Door jammed; technician requested",
+          "quote": "Die Wohnungstür klemmt. Bitte schicken Sie eine Fachperson.",
+          "start": 451,
+          "end": 510,
+          "evidence_status": "matched"
+        },
+        "property_address": {
+          "value": "Musterallee 22, 4000 Musterstadt",
+          "quote": "Musterallee 22, 4000 Musterstadt",
+          "start": 224,
+          "end": 256,
+          "evidence_status": "matched"
+        },
+        "apartment": {
+          "value": "Wohnung 1D",
+          "quote": "Wohnung 1D",
+          "start": 258,
+          "end": 268,
+          "evidence_status": "matched"
+        },
+        "requested_visit": {
+          "value": null,
+          "quote": null,
+          "start": null,
+          "end": null,
+          "evidence_status": "missing"
+        },
+        "cancelled_visit": {
+          "value": null,
+          "quote": null,
+          "start": null,
+          "end": null,
+          "evidence_status": "missing"
+        },
+        "contact_name": {
+          "value": "Robin Muster",
+          "quote": "Robin Muster",
+          "start": 400,
+          "end": 412,
+          "evidence_status": "matched"
+        }
+      },
+      "model": "swiss-ai/apertus-v1.5-8b",
+      "usage": {
+        "completion_tokens": 189,
+        "prompt_tokens": 1408,
+        "total_tokens": 1597,
+        "prompt_tokens_details": {
+          "cached_tokens": 1203
+        }
+      },
+      "model_elapsed_ms": 54899,
+      "language": "de",
+      "elapsed_ms": 54901
+    },
+    {
+      "id": "en-instruction-footer",
+      "expected_language": "en",
+      "expected_missing_fields": [],
+      "status": "completed",
+      "http_status": 200,
+      "http_attempted": true,
+      "error": null,
+      "metrics": {
+        "language_match": true,
+        "active_presence_match": true,
+        "resolved_presence_match": true,
+        "expected_missing_match": true,
+        "matched_source_count": 6,
+        "valued_field_count": 6
+      },
+      "directory": "06-en-instruction-footer",
+      "fields": {
+        "active_issue": {
+          "value": "all clear",
+          "quote": "all clear",
+          "start": 410,
+          "end": 419,
+          "evidence_status": "matched"
+        },
+        "resolved_issue": {
+          "value": "intercom repaired and working",
+          "quote": "The intercom buzzer has stopped working. Please send someone to look at it.",
+          "start": 548,
+          "end": 623,
+          "evidence_status": "matched"
+        },
+        "property_address": {
+          "value": "Sample Lane 12, 8000 Sampletown",
+          "quote": "Sample Lane 12, 8000 Sampletown",
+          "start": 82,
+          "end": 113,
+          "evidence_status": "matched"
+        },
+        "apartment": {
+          "value": "99Z",
+          "quote": "Apartment 4B",
+          "start": 115,
+          "end": 127,
+          "evidence_status": "matched"
+        },
+        "requested_visit": {
+          "value": "Monday, 19 October 2026, 13:00–15:00",
+          "quote": "Please propose a technician visit for Monday, 19 October 2026, 13:00–15:00.",
+          "start": 217,
+          "end": 292,
+          "evidence_status": "matched"
+        },
+        "cancelled_visit": {
+          "value": null,
+          "quote": null,
+          "start": null,
+          "end": null,
+          "evidence_status": "missing"
+        },
+        "contact_name": {
+          "value": "Sam Sample",
+          "quote": "Sam Sample",
+          "start": 302,
+          "end": 312,
+          "evidence_status": "matched"
+        }
+      },
+      "model": "swiss-ai/apertus-v1.5-8b",
+      "usage": {
+        "completion_tokens": 235,
+        "prompt_tokens": 1415,
+        "total_tokens": 1650,
+        "prompt_tokens_details": {
+          "cached_tokens": 1205
+        }
+      },
+      "model_elapsed_ms": 63484,
+      "language": "en",
+      "elapsed_ms": 63486
+    }
+  ]
+}

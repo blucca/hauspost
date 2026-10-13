@@ -5,7 +5,7 @@ import os
 from pathlib import Path
 import time
 
-from playwright.sync_api import sync_playwright
+from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeout
 
 
 output = Path(os.environ.get("HAUSPOST_ARTIFACT_DIR", "temp/onprem-smoke/demo"))
@@ -43,7 +43,10 @@ with sync_playwright() as playwright:
         assert response.status == 200, result
         page.wait_for_function("state.result?.origin === 'live'")
         event("model_result", model=result["model"], elapsed_ms=result["elapsed_ms"])
-        page.screenshot(path=str(output / "live-result.png"), full_page=True)
+        try:
+            page.screenshot(path=str(output / "live-result.png"), full_page=True, timeout=5000)
+        except PlaywrightTimeout:
+            event("still_capture_timeout")
         page.wait_for_timeout(4000)
         for key, label in (("active_issue", "Current repair"), ("resolved_issue", "Already resolved"),
                            ("cancelled_visit", "Cancelled visit"),
@@ -84,7 +87,10 @@ with sync_playwright() as playwright:
         assert "awaiting coordinator confirmation" in brief and "Coordinator entry" in brief
         event("repair_handoff")
         (output / "handoff.txt").write_text(brief)
-        page.screenshot(path=str(output / "handoff.png"))
+        try:
+            page.screenshot(path=str(output / "handoff.png"), timeout=5000)
+        except PlaywrightTimeout:
+            event("handoff_still_timeout")
         page.wait_for_timeout(7000)
         assert not errors, errors
         event("completed", page_errors=errors)

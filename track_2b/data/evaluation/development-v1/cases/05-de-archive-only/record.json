@@ -1,0 +1,15 @@
+{
+  "id": "de-archive-only",
+  "expected_language": "de",
+  "expected_missing_fields": [],
+  "status": "error",
+  "http_status": 502,
+  "http_attempted": true,
+  "error": {
+    "type": "HTTPError",
+    "message": "HTTP Error 502: Bad Gateway"
+  },
+  "metrics": null,
+  "directory": "05-de-archive-only",
+  "elapsed_ms": 31239
+}

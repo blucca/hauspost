@@ -1,0 +1,6 @@
+{
+  "run_url": "https://github.com/blucca/hauspost/actions/runs/38328626014",
+  "commit": "bb1f70fa946038c1f75d32d712cf42f1113cf143",
+  "label": "Fixed-schema development evaluation; original API responses retained",
+  "post_run_review": "The browser reruns source matching and copied-identifier checks when loading these recorded outputs."
+}

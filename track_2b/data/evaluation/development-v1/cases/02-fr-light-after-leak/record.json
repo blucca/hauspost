@@ -1,0 +1,81 @@
+{
+  "id": "fr-light-after-leak",
+  "expected_language": "fr",
+  "expected_missing_fields": [],
+  "status": "completed",
+  "http_status": 200,
+  "http_attempted": true,
+  "error": null,
+  "metrics": {
+    "language_match": true,
+    "active_presence_match": true,
+    "resolved_presence_match": true,
+    "expected_missing_match": true,
+    "matched_source_count": 5,
+    "valued_field_count": 6
+  },
+  "directory": "02-fr-light-after-leak",
+  "fields": {
+    "active_issue": {
+      "value": "Plafonnier de la salle de bains ne s'allume toujours pas",
+      "quote": "Le plafonnier de la salle de bains ne s'allume toujours pas.",
+      "start": 200,
+      "end": 260,
+      "evidence_status": "matched"
+    },
+    "resolved_issue": {
+      "value": "Fuite sous l'évier réparée",
+      "quote": "la fuite sous l'évier est réparée depuis lundi.",
+      "start": 152,
+      "end": 199,
+      "evidence_status": "matched"
+    },
+    "property_address": {
+      "value": "Rue Exemple 8, 1000 Ville-Exemple",
+      "quote": "Rue Exemple 8, 1000 Ville-Exemple",
+      "start": 100,
+      "end": 133,
+      "evidence_status": "matched"
+    },
+    "apartment": {
+      "value": "3B",
+      "quote": "Appartement 3B",
+      "start": 135,
+      "end": 149,
+      "evidence_status": "matched"
+    },
+    "requested_visit": {
+      "value": "jeudi 15 octobre 2026 de 10 h à 12 h",
+      "quote": "Je suis disponible le jeudi 15 octobre 2026 de 10 h à 12 h.",
+      "start": 261,
+      "end": 320,
+      "evidence_status": "matched"
+    },
+    "cancelled_visit": {
+      "value": null,
+      "quote": null,
+      "start": null,
+      "end": null,
+      "evidence_status": "missing"
+    },
+    "contact_name": {
+      "value": "Camille Exemple",
+      "quote": "Cordialement, Camille Exemple",
+      "start": null,
+      "end": null,
+      "evidence_status": "unmatched"
+    }
+  },
+  "model": "swiss-ai/apertus-v1.5-8b",
+  "usage": {
+    "completion_tokens": 268,
+    "prompt_tokens": 902,
+    "total_tokens": 1170,
+    "prompt_tokens_details": {
+      "cached_tokens": 718
+    }
+  },
+  "model_elapsed_ms": 57859,
+  "language": "fr",
+  "elapsed_ms": 57861
+}

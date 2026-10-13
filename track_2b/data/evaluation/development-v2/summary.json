@@ -1,0 +1,27 @@
+{
+  "checks": {
+    "real_apertus_8b": true,
+    "active_bell": true,
+    "resolved_tap": true,
+    "requested_friday": true,
+    "cancelled_wednesday": false,
+    "active_issue_source_matched": true,
+    "resolved_issue_source_matched": true,
+    "requested_visit_source_matched": true,
+    "cancelled_visit_source_matched": false
+  },
+  "model": "swiss-ai/apertus-v1.5-8b",
+  "error": "AssertionError: Failed checks: cancelled_wednesday, cancelled_visit_source_matched",
+  "usage": {
+    "completion_tokens": 226,
+    "prompt_tokens": 1356,
+    "total_tokens": 1582,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_ms": 153381,
+  "language": "de",
+  "wall_seconds": 153.41,
+  "passed": false
+}

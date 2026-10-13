@@ -1,0 +1,81 @@
+{
+  "id": "en-instruction-footer",
+  "expected_language": "en",
+  "expected_missing_fields": [],
+  "status": "completed",
+  "http_status": 200,
+  "http_attempted": true,
+  "error": null,
+  "metrics": {
+    "language_match": true,
+    "active_presence_match": true,
+    "resolved_presence_match": true,
+    "expected_missing_match": true,
+    "matched_source_count": 6,
+    "valued_field_count": 6
+  },
+  "directory": "06-en-instruction-footer",
+  "fields": {
+    "active_issue": {
+      "value": "all clear",
+      "quote": "all clear",
+      "start": 410,
+      "end": 419,
+      "evidence_status": "matched"
+    },
+    "resolved_issue": {
+      "value": "intercom repaired and working",
+      "quote": "The intercom buzzer has stopped working. Please send someone to look at it.",
+      "start": 548,
+      "end": 623,
+      "evidence_status": "matched"
+    },
+    "property_address": {
+      "value": "Sample Lane 12, 8000 Sampletown",
+      "quote": "Sample Lane 12, 8000 Sampletown",
+      "start": 82,
+      "end": 113,
+      "evidence_status": "matched"
+    },
+    "apartment": {
+      "value": "99Z",
+      "quote": "Apartment 4B",
+      "start": 115,
+      "end": 127,
+      "evidence_status": "matched"
+    },
+    "requested_visit": {
+      "value": "Monday, 19 October 2026, 13:00–15:00",
+      "quote": "Please propose a technician visit for Monday, 19 October 2026, 13:00–15:00.",
+      "start": 217,
+      "end": 292,
+      "evidence_status": "matched"
+    },
+    "cancelled_visit": {
+      "value": null,
+      "quote": null,
+      "start": null,
+      "end": null,
+      "evidence_status": "missing"
+    },
+    "contact_name": {
+      "value": "Sam Sample",
+      "quote": "Sam Sample",
+      "start": 302,
+      "end": 312,
+      "evidence_status": "matched"
+    }
+  },
+  "model": "swiss-ai/apertus-v1.5-8b",
+  "usage": {
+    "completion_tokens": 235,
+    "prompt_tokens": 1415,
+    "total_tokens": 1650,
+    "prompt_tokens_details": {
+      "cached_tokens": 1205
+    }
+  },
+  "model_elapsed_ms": 63484,
+  "language": "en",
+  "elapsed_ms": 63486
+}

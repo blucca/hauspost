@@ -1,0 +1,81 @@
+{
+  "id": "de-archive-only",
+  "expected_language": "de",
+  "expected_missing_fields": [],
+  "status": "completed",
+  "http_status": 200,
+  "http_attempted": true,
+  "error": null,
+  "metrics": {
+    "language_match": true,
+    "active_presence_match": true,
+    "resolved_presence_match": false,
+    "expected_missing_match": true,
+    "matched_source_count": 4,
+    "valued_field_count": 4
+  },
+  "directory": "05-de-archive-only",
+  "fields": {
+    "active_issue": {
+      "value": null,
+      "quote": null,
+      "start": null,
+      "end": null,
+      "evidence_status": "missing"
+    },
+    "resolved_issue": {
+      "value": "Door jammed; technician requested",
+      "quote": "Die Wohnungstür klemmt. Bitte schicken Sie eine Fachperson.",
+      "start": 451,
+      "end": 510,
+      "evidence_status": "matched"
+    },
+    "property_address": {
+      "value": "Musterallee 22, 4000 Musterstadt",
+      "quote": "Musterallee 22, 4000 Musterstadt",
+      "start": 224,
+      "end": 256,
+      "evidence_status": "matched"
+    },
+    "apartment": {
+      "value": "Wohnung 1D",
+      "quote": "Wohnung 1D",
+      "start": 258,
+      "end": 268,
+      "evidence_status": "matched"
+    },
+    "requested_visit": {
+      "value": null,
+      "quote": null,
+      "start": null,
+      "end": null,
+      "evidence_status": "missing"
+    },
+    "cancelled_visit": {
+      "value": null,
+      "quote": null,
+      "start": null,
+      "end": null,
+      "evidence_status": "missing"
+    },
+    "contact_name": {
+      "value": "Robin Muster",
+      "quote": "Robin Muster",
+      "start": 400,
+      "end": 412,
+      "evidence_status": "matched"
+    }
+  },
+  "model": "swiss-ai/apertus-v1.5-8b",
+  "usage": {
+    "completion_tokens": 189,
+    "prompt_tokens": 1408,
+    "total_tokens": 1597,
+    "prompt_tokens_details": {
+      "cached_tokens": 1203
+    }
+  },
+  "model_elapsed_ms": 54899,
+  "language": "de",
+  "elapsed_ms": 54901
+}
