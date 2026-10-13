@@ -52,16 +52,20 @@ with sync_playwright() as playwright:
             event("source_review", field=key)
             page.wait_for_timeout(2800)
         for key, field in result["fields"].items():
-            if field.get("value") and field.get("evidence_status") != "matched":
-                # A visible coordinator edit uses the fixture's exact source text.
-                quote = page.evaluate("key => state.selected.expected.source_quotes[key]", key)
-                if quote:
-                    page.locator(f".field-row.{key} button[aria-label^='Edit ']").click()
-                    page.locator("#fieldQuote").fill(quote)
-                    page.wait_for_timeout(2000)
-                    page.get_by_role("button", name="Save detail", exact=True).click()
-                    event("coordinator_source_correction", field=key)
-                    page.wait_for_timeout(2000)
+            expected = page.evaluate("key => state.selected.example.fields[key]", key)
+            needs_entry = bool(expected["value"]) and not field.get("value")
+            needs_link = bool(field.get("value")) and field.get("evidence_status") != "matched"
+            if (needs_entry or needs_link) and expected["quote"]:
+                # Each correction is a visible scripted coordinator action.
+                page.locator(f".field-row.{key} button[aria-label^='Edit ']").click()
+                if needs_entry:
+                    page.locator("#fieldValue").fill(expected["value"])
+                page.locator("#operatorEntry").uncheck()
+                page.locator("#fieldQuote").fill(expected["quote"])
+                page.wait_for_timeout(2000)
+                page.get_by_role("button", name="Save detail", exact=True).click()
+                event("coordinator_correction", field=key, added_value=needs_entry)
+                page.wait_for_timeout(2000)
         page.locator("#confirmAll").click()
         page.get_by_role("button", name="Draft clarification", exact=True).click()
         assert "Wohnungsnummer" in page.locator("#handoffText").inner_text()
