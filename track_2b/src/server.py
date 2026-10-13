@@ -8,6 +8,7 @@ import re
 import socket
 import threading
 import time
+from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.error import HTTPError, URLError
 from urllib.parse import unquote, urlsplit
@@ -21,6 +22,8 @@ MAX_BODY_BYTES = 200000
 MAX_MODEL_BYTES = 262144
 DEFAULT_MODEL_TIMEOUT = 180
 MODEL_LOCK = threading.Lock()
+TRIAL_INPUT_CHARS = 6000
+TRIAL_REQUEST_LIMIT = 200
 FIELDS = ("active_issue", "resolved_issue", "property_address", "apartment",
           "requested_visit", "cancelled_visit", "contact_name")
 COPIED_FIELDS = ("property_address", "apartment", "contact_name")
@@ -245,6 +248,58 @@ def call_model(text, config):
     return result
 
 
+def trial_state():
+    """The public preview has a persisted, finite allowance; content stays in memory."""
+    filename = os.environ.get("HAUSPOST_TRIAL_STATE")
+    if not filename:
+        return None
+    try:
+        data = json.loads(Path(filename).read_text())
+        expires = datetime.fromisoformat(os.environ["HAUSPOST_TRIAL_END"].replace("Z", "+00:00"))
+        if type(data["attempts"]) is not int or data["attempts"] < 0:
+            raise ValueError("attempts")
+    except (OSError, ValueError, KeyError, TypeError):
+        raise APIError(503, "trial_offline", "The live preview is offline. Open the recorded example desk or run HausPost on your infrastructure.") from None
+    if datetime.now(timezone.utc) >= expires:
+        raise APIError(410, "trial_ended", "The live preview has ended. The recorded desk and self-managed application remain available.")
+    if data["attempts"] >= TRIAL_REQUEST_LIMIT:
+        raise APIError(429, "trial_capacity", "The live preview has reached its capacity. Explore the recorded desk or run HausPost on your infrastructure.")
+    return data
+
+
+def save_trial(data):
+    # ponytail: one process and MODEL_LOCK serialize this small preview ledger.
+    # An interrupted write leaves a failed-closed ledger for the operator to repair.
+    Path(os.environ["HAUSPOST_TRIAL_STATE"]).write_text(json.dumps(data) + "\n")
+
+
+def dispatch_model(text, config):
+    trial = trial_state()
+    if trial is None:
+        return call_model(text, config)
+    if config["base_url"] != "https://api.publicai.co/v1" or config["model"] != "swiss-ai/apertus-v1.5-8b":
+        raise APIError(503, "trial_configuration", "The preview endpoint needs operator attention. Explore the recorded example desk.")
+    trial["attempts"] += 1
+    trial["last_attempt_at"] = datetime.now(timezone.utc).isoformat()
+    save_trial(trial)  # Reserve an attempt before every provider request, including failures.
+    result = {}
+    try:
+        result = call_model(text, config)
+        trial["successes"] = trial.get("successes", 0) + 1
+        return result
+    except APIError as error:
+        result = error.metadata
+        trial["failures"] = trial.get("failures", 0) + 1
+        raise
+    finally:
+        usage = result.pop("usage", {})
+        for key in ("prompt_tokens", "completion_tokens"):
+            value = usage.get(key, 0)
+            if type(value) is int and value >= 0:
+                trial[key] = trial.get(key, 0) + value
+        save_trial(trial)
+
+
 class Handler(BaseHTTPRequestHandler):
     def log_message(self, *_args):
         pass
@@ -266,9 +321,18 @@ class Handler(BaseHTTPRequestHandler):
         route = urlsplit(self.path).path
         if route == "/api/status":
             config = configuration()
-            return self.send_json(200, {"mode": "live" if config["base_url"] else "sample",
-                                        "model": config["model"], "max_input_chars": MAX_INPUT_CHARS,
-                                        "model_timeout_seconds": config["timeout_seconds"]})
+            public_trial = bool(os.environ.get("HAUSPOST_TRIAL_STATE"))
+            status = {"mode": "live" if config["base_url"] else "sample", "model": config["model"],
+                      "max_input_chars": TRIAL_INPUT_CHARS if public_trial else MAX_INPUT_CHARS,
+                      "model_timeout_seconds": config["timeout_seconds"], "public_trial": public_trial}
+            if public_trial:
+                try:
+                    trial_state()
+                    status["trial_available"] = True
+                except APIError as error:
+                    status.update(trial_available=False, trial_message=str(error))
+                status["trial_ends_at"] = os.environ.get("HAUSPOST_TRIAL_END", "")
+            return self.send_json(200, status)
         data_file = route.startswith("/data/")
         base = DATA_ROOT if data_file else WEB_ROOT
         name = unquote(route[len("/data/"):] if data_file else route.lstrip("/") or "index.html")
@@ -319,8 +383,9 @@ class Handler(BaseHTTPRequestHandler):
             text = data.get("text") if isinstance(data, dict) else None
             if not isinstance(text, str) or not text.strip():
                 raise APIError(400, "text_required", "Paste a tenant message into the text field, then retry.")
-            if len(text) > MAX_INPUT_CHARS:
-                raise APIError(413, "input_size", "Shorten the tenant message to 16,000 characters or fewer.")
+            limit = TRIAL_INPUT_CHARS if os.environ.get("HAUSPOST_TRIAL_STATE") else MAX_INPUT_CHARS
+            if len(text) > limit:
+                raise APIError(413, "input_size", f"Shorten the tenant message to {limit:,} characters or fewer.")
             try:
                 text.encode("utf-8")
             except UnicodeEncodeError:
@@ -331,7 +396,7 @@ class Handler(BaseHTTPRequestHandler):
             if not MODEL_LOCK.acquire(blocking=False):
                 raise APIError(409, "analysis_busy", "One message is being analysed. Wait for it to finish, then retry.")
             try:
-                result = call_model(text, config)
+                result = dispatch_model(text, config)
             finally:
                 MODEL_LOCK.release()
             self.send_json(200, result)

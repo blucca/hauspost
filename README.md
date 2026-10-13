@@ -4,7 +4,7 @@
 
 A tenant says the tap is fixed, the doorbell is still broken, and Wednesday’s visit has moved to Friday. HausPost separates those updates, links each detail to the original words, and helps a property coordinator prepare the right repair brief or follow-up question.
 
-[Open the example desk](https://blucca.github.io/hauspost/) · [104-second demonstration](https://blucca.github.io/hauspost/demo/) · [Report PDF](track_2b/docs/technical-report.pdf) · [Deployment](track_2b/docs/deployment.md) · [Technical report](track_2b/technical_report.md)
+[Try a live email](https://blucca.github.io/hauspost/?live=1) · [Open the example desk](https://blucca.github.io/hauspost/) · [104-second demonstration](https://blucca.github.io/hauspost/demo/) · [Report PDF](track_2b/docs/technical-report.pdf) · [Deployment](track_2b/docs/deployment.md) · [Technical report](track_2b/technical_report.md)
 
 ## Use the desk
 
@@ -13,6 +13,8 @@ A tenant says the tap is fixed, the doorbell is still broken, and Wednesday’s 
 3. Select a detail to highlight its source. Correct a broken source link or add a clearly labelled coordinator entry.
 4. Confirm the reviewed details. Missing information produces a clarification draft; a resolved update produces a closure reply.
 5. Copy or download the internal brief and the tenant-language reply. Appointment windows stay **requested / awaiting confirmation**.
+
+The [live preview](https://blucca.github.io/hauspost/?live=1) accepts fictional or anonymised text through PublicAI’s Apertus v1.5 8B service. It opens with an editable example; replace the text, analyse, review the sources, and export the brief. The preview runs through **24 October 2026**, subject to available capacity. Use the self-managed stack for your organisation’s tenant data.
 
 The public example desk runs locally in the browser. Author-written examples and recorded model outputs have separate labels. The application’s live mode calls the operator-configured Apertus endpoint.
 

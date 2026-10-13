@@ -7,6 +7,7 @@ import os
 from pathlib import Path
 import sys
 import threading
+from tempfile import TemporaryDirectory
 from unittest.mock import patch
 
 sys.dont_write_bytecode = True
@@ -114,6 +115,28 @@ try:
             assert status == 502 and result["error"] == "model_format"
             assert result["raw_model_output"] == raw and result["model"] == app.configuration()["model"]
             assert result["usage"]["completion_tokens"] == 90 and isinstance(result["elapsed_ms"], int)
+    Path("temp").mkdir(exist_ok=True)
+    with TemporaryDirectory(prefix="hauspost-trial-check-", dir="temp") as directory:
+        quota = Path(directory) / "quota.json"
+        quota.write_text(json.dumps({"attempts": app.TRIAL_REQUEST_LIMIT - 1}))
+        with patch.dict(os.environ, {"LLM_BASE_URL": "https://api.publicai.co/v1",
+                                     "LLM_NAME": "swiss-ai/apertus-v1.5-8b",
+                                     "HAUSPOST_TRIAL_STATE": str(quota),
+                                     "HAUSPOST_TRIAL_END": "2099-01-01T00:00:00Z"}):
+            with patch.object(app, "call_model", return_value={"fields": fields, "usage": {"prompt_tokens": 100}}) as model:
+                assert request("POST", "/api/analyse", {"text": "x" * 6001}, headers)[0] == 413
+                status, result = request("POST", "/api/analyse", {"text": source}, headers)
+                assert status == 200 and "usage" not in result
+                saved = json.loads(quota.read_text())
+                assert saved["attempts"] == app.TRIAL_REQUEST_LIMIT and saved["prompt_tokens"] == 100
+                assert request("POST", "/api/analyse", {"text": source}, headers)[1]["error"] == "trial_capacity"
+                assert request("GET", "/api/status")[1]["trial_available"] is False
+                assert model.call_count == 1
+                quota.write_text('{"attempts": 0}')
+                os.environ["HAUSPOST_TRIAL_END"] = "2000-01-01T00:00:00Z"
+                assert request("POST", "/api/analyse", {"text": source}, headers)[0] == 410
+                quota.write_text("interrupted ledger write")
+                assert request("POST", "/api/analyse", {"text": source}, headers)[0] == 503
 finally:
     httpd.shutdown()
     httpd.server_close()

@@ -7,7 +7,7 @@ const FIELD_NAMES = {
   property_address: 'Property address', apartment: 'Apartment / unit', contact_name: 'Tenant'
 };
 const LANGUAGES = {de:'German', fr:'French', it:'Italian', en:'English'};
-const state = {cases:[], recorded:{}, mode:'sample', timeout:180, selected:null, text:'', result:null, approved:new Set(), field:null, editing:false, controller:null, generation:0, drafts:null, tab:'brief'};
+const state = {cases:[], recorded:{}, mode:'sample', publicTrial:false, timeout:180, selected:null, text:'', result:null, approved:new Set(), field:null, editing:false, controller:null, generation:0, drafts:null, tab:'brief'};
 
 function node(tag, className, text) {
   const el = document.createElement(tag);
@@ -178,7 +178,7 @@ function render() {
   $('analyseButton').textContent = state.mode === 'live' ? 'Analyse with Apertus' : 'Load example brief';
   $('briefSubtitle').textContent = state.result ? 'Confirm the details you want to hand over.' : 'Apertus reads the thread. You decide the handoff.';
   const origin = state.result?.origin;
-  $('runLabel').textContent = origin === 'live' ? `${state.result.model} · ${(state.result.elapsed_ms / 1000).toFixed(1)} s` : origin === 'recorded' ? 'Recorded Apertus 8B result' : 'Prepared example';
+  $('runLabel').textContent = origin === 'live' ? `${state.result.model} · ${(state.result.elapsed_ms / 1000).toFixed(1)} s` : origin === 'recorded' ? 'Recorded Apertus 8B result' : state.mode === 'live' ? 'Apertus v1.5 8B' : 'Prepared example';
   if (!state.result) {
     $('attention').classList.remove('ready');
     $('attentionText').textContent = 'Analyse the message to prepare the repair brief.';
@@ -211,7 +211,7 @@ async function analyse() {
   $('analyseButton').disabled = true;
   document.body.classList.add('busy');
   $('attentionText').textContent = 'Apertus is reading the full thread…';
-  announce('Analysis is running on the configured Apertus server. CPU inference can take a few minutes.');
+  announce(state.publicTrial ? 'Apertus is reading your message through PublicAI. Keep this page open while it prepares the fields.' : 'Analysis is running on the configured Apertus server. CPU inference can take a few minutes.');
   try {
     const response = await fetch('api/analyse', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({text:state.text}), signal:state.controller.signal});
     const data = await response.json();
@@ -355,13 +355,32 @@ async function init() {
     if (!casesResponse.ok) throw new Error('Example data failed to load. Refresh the page to try again.');
     state.cases = await casesResponse.json();
     state.recorded = recordedResponse.ok ? await recordedResponse.json() : {};
-    state.mode = status.mode === 'live' ? 'live' : 'sample';
+    state.publicTrial = status.public_trial === true;
+    state.mode = status.mode === 'live' && status.trial_available !== false ? 'live' : 'sample';
     state.timeout = status.model_timeout_seconds || 180;
+    $('sourceEditor').maxLength = status.max_input_chars || 16000;
+    $('liveLink').hidden = state.mode === 'live' || state.publicTrial;
     $('modeBadge').textContent = state.mode === 'live' ? 'Apertus connected' : 'Example mode';
     if (state.mode === 'live') $('privacyNote').textContent = 'Analysis sends this message to the Apertus endpoint configured by your operator. The on-prem profile uses the model container on your own infrastructure. This desk keeps the message in memory for the current interaction.';
     $('casePicker').replaceChildren();
     for (const item of state.cases) {const option = node('option','',`${item.language.toUpperCase()} · ${item.title}`);option.value=item.id;$('casePicker').append(option);}
     chooseCase(state.cases[0].id);
+    if (state.publicTrial) {
+      $('liveNote').hidden = false;
+      $('liveNote').textContent = status.trial_available ? 'Live preview through PublicAI. Use fictional or anonymised correspondence, up to 6,000 characters. Replace names and addresses before analysing.' : status.trial_message;
+      $('privacyNote').textContent = 'Analysis sends the text through this preview server to PublicAI’s Apertus v1.5 8B service. HausPost processes the text in memory and retains aggregate request counts. PublicAI’s terms govern provider processing. For tenant data under your organisation’s control, use the self-managed deployment linked above.';
+      state.editing = state.mode === 'live';
+      render();
+    }
+    if (new URLSearchParams(location.search).get('live') === '1' && state.mode === 'sample') {
+      try {
+        const response = await fetch('trial.json', {cache:'no-store'});
+        const trial = await response.json();
+        const endpoint = new URL(trial.url);
+        if (!response.ok || endpoint.protocol !== 'https:' || Date.now() >= Date.parse(trial.ends_at)) throw new Error('The live preview has ended. Explore the recorded desk or run HausPost on your infrastructure.');
+        location.replace(endpoint.href);
+      } catch (error) {announce(error.message || 'The live preview is offline. The recorded desk is ready below.', true);}
+    }
   } catch (error) {announce(error.message, true);$('modeBadge').textContent='Load failed';}
 }
 

@@ -22,7 +22,7 @@
   </header>
   <main id="workspace">
     <section class="intro" aria-labelledby="pageTitle">
-      <div><h1 id="pageTitle">A clear brief for the next visit.</h1><p>The latest fault, the finished repair, and the changed appointment. Each tied to the tenant’s words.</p></div>
+      <div><h1 id="pageTitle">A clear brief for the next visit.</h1><p>The latest fault, the finished repair, and the changed appointment. Each tied to the tenant’s words.</p><a id="liveLink" class="trial-link" href="?live=1">Try a live email with Apertus</a></div>
       <label class="example-picker" for="casePicker">Open an example<select id="casePicker"><option>Loading examples…</option></select></label>
     </section>
     <div id="notice" class="notice" role="status" aria-live="polite"></div>
@@ -32,6 +32,7 @@
         <div class="source-caption"><span id="sourceLabel">Synthetic example</span><span id="sourceLength"></span></div>
         <div id="sourceText" class="source-text" tabindex="0" aria-label="Original tenant email"></div>
         <label id="sourceEditorLabel" class="source-editor-label" hidden>Paste the latest email and its quoted history<textarea id="sourceEditor" maxlength="16000" spellcheck="false"></textarea></label>
+        <p id="liveNote" class="live-note" hidden></p>
         <div class="source-actions"><button id="analyseButton" class="button primary" type="button">Load example brief</button><span id="runLabel">Prepared example</span></div>
         <p class="source-help" id="sourceHelp">Choose a detail on the repair brief to find its original passage.</p>
         <details class="hosting-note"><summary>Where does the message go?</summary><p id="privacyNote">This example runs in your browser. Your edits stay on this page. The self-hosted application sends analysis requests to the Apertus server configured by its operator.</p><p>Drafts leave the desk when you copy or download them. Source code and deployment instructions are <a href="https://github.com/blucca/hauspost" target="_blank" rel="noreferrer">on GitHub</a>.</p></details>
