@@ -272,6 +272,8 @@ class Handler(BaseHTTPRequestHandler):
         data_file = route.startswith("/data/")
         base = DATA_ROOT if data_file else WEB_ROOT
         name = unquote(route[len("/data/"):] if data_file else route.lstrip("/") or "index.html")
+        if not data_file and name.endswith("/"):
+            name += "index.html"
         try:
             target = (base / name).resolve()
             target.relative_to(base.resolve())

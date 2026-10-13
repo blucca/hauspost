@@ -4,7 +4,7 @@
 
 A tenant says the tap is fixed, the doorbell is still broken, and Wednesday’s visit has moved to Friday. HausPost separates those updates, links each detail to the original words, and helps a property coordinator prepare the right repair brief or follow-up question.
 
-[Open the example desk](https://blucca.github.io/hauspost/) · [Deployment](track_2b/docs/deployment.md) · [Technical report](track_2b/technical_report.md)
+[Open the example desk](https://blucca.github.io/hauspost/) · [104-second demonstration](https://blucca.github.io/hauspost/demo/) · [Report PDF](track_2b/docs/technical-report.pdf) · [Deployment](track_2b/docs/deployment.md) · [Technical report](track_2b/technical_report.md)
 
 ## Use the desk
 
@@ -18,7 +18,7 @@ The public example desk runs locally in the browser. Author-written examples and
 
 ## Run HausPost
 
-Requires Docker with Compose v2. The full CPU profile needs **8 GiB RAM, 8 GiB free disk, and 4 CPU threads**. Run from either the repository root or `track_2b/`:
+Requires Docker with Compose v2. The measured CPU profile uses a **16-GB-class host, 8 GiB free disk, and 4 CPU threads**. The 8 GiB RAM planning floor requires local headroom and acceptance above the observed 7 GiB model peak. Run from either the repository root or `track_2b/`:
 
 ```sh
 make run
@@ -52,7 +52,7 @@ PYTHONDONTWRITEBYTECODE=1 python track_2b/tests/check.py
 
 The repository includes six small, synthetic cases with explicit expected fields. They cover four languages, stale quoted repairs, missing unit numbers, conflicting visit times, and instruction-like text inside an email. [Data notes](track_2b/data/README.md) distinguish author annotations from measured model results.
 
-The manual **Apertus on-prem smoke** GitHub Actions workflow runs the real model and application Docker stack on a public Linux runner, analyses a new German thread, and saves its raw response, source checks, runtime, and resource snapshot. Results belong to the recorded run’s model, quantisation, hardware, and cases.
+The manual **Apertus on-prem smoke** GitHub Actions workflow runs the real model and application Docker stack on a public Linux runner, analyses a new German thread, and saves its raw response, source checks, runtime, and resource snapshot. Results belong to the recorded run’s model, quantisation, hardware, and cases. The [measured comparison](track_2b/docs/evaluation.md) keeps all six real responses and remaining failures. The updated copied-identifier gate blocks a model value that differs from its cited address, unit or name.
 
 ## Scope
 

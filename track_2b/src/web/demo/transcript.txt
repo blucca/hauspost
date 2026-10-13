@@ -1,0 +1,11 @@
+An old leak, a new fault, and a changed appointment can arrive in one tenant email. HausPost turns that thread into a repair brief your property coordinator can review, using Apertus running on your own infrastructure.
+
+Here, the quantized eight-billion-parameter model runs inside Docker on four CPU threads. We submit a synthetic German message through the live application. The waiting period is shortened; the result and timing come from that actual request.
+
+The tap is already repaired. The doorbell still needs attention. Wednesday’s appointment is cancelled, and Friday is a tenant request awaiting confirmation. Click a field to locate its original words, then check the meaning before approving it.
+
+The tenant left out the apartment number. HausPost prepares a German clarification. Once the coordinator supplies three B, the new detail is labelled as a coordinator entry, and the handoff can be reviewed again.
+
+Our six-case development set spans German, French, Italian, and English. It includes archived repairs, contradictory times, and an instruction-like footer. Raw answers, failed cases, and a repeatable evaluation are public, alongside the corrected workflow.
+
+Run make run from a clean checkout to start the full self-managed stack. The office keeps its own model and reviews every handoff. Open the example desk, explore the recorded results, and try HausPost with your own Apertus endpoint.

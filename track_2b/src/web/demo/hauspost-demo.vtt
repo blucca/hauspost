@@ -1,0 +1,55 @@
+WEBVTT
+
+00:00:00.500 --> 00:00:05.570
+An old leak, a new fault, and a changed appointment can arrive in one tenant email.
+
+00:00:05.590 --> 00:00:13.004
+HausPost turns that thread into a repair brief your property coordinator can review, using Apertus running on your own infrastructure.
+
+00:00:15.260 --> 00:00:21.572
+Here, the quantized eight-billion-parameter model runs inside Docker on four CPU threads.
+
+00:00:21.592 --> 00:00:25.671
+We submit a synthetic German message through the live application.
+
+00:00:25.691 --> 00:00:30.788
+The waiting period is shortened; the result and timing come from that actual request.
+
+00:00:33.060 --> 00:00:35.193
+The tap is already repaired.
+
+00:00:35.213 --> 00:00:37.557
+The doorbell still needs attention.
+
+00:00:37.577 --> 00:00:42.971
+Wednesday’s appointment is cancelled, and Friday is a tenant request awaiting confirmation.
+
+00:00:42.991 --> 00:00:47.748
+Click a field to locate its original words, then check the meaning before approving it.
+
+00:00:50.020 --> 00:00:52.599
+The tenant left out the apartment number.
+
+00:00:52.619 --> 00:00:55.708
+HausPost prepares a German clarification.
+
+00:00:55.728 --> 00:01:03.316
+Once the coordinator supplies three B, the new detail is labelled as a coordinator entry, and the handoff can be reviewed again.
+
+00:01:05.580 --> 00:01:10.975
+Our six-case development set spans German, French, Italian, and English.
+
+00:01:10.995 --> 00:01:16.653
+It includes archived repairs, contradictory times, and an instruction- like footer.
+
+00:01:16.673 --> 00:01:23.220
+Raw answers, failed cases, and a repeatable evaluation are public, alongside the corrected workflow.
+
+00:01:25.500 --> 00:01:30.052
+Run make run from a clean checkout to start the full self-managed stack.
+
+00:01:30.072 --> 00:01:33.846
+The office keeps its own model and reviews every handoff.
+
+00:01:33.866 --> 00:01:40.476
+Open the example desk, explore the recorded results, and try HausPost with your own Apertus endpoint.

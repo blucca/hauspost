@@ -1,0 +1,372 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>HausPost — Technical report</title><style>
+@font-face{font-family:Public Sans;src:url(../src/web/fonts/public-sans-latin.woff2) format('woff2');font-style:normal;font-weight:100 900;font-display:swap}
+@font-face{font-family:Barlow Condensed;src:url(../src/web/fonts/barlow-condensed-600.ttf) format('truetype');font-style:normal;font-weight:600;font-display:swap}
+:root{--blue:#214bd6;--ink:#152a4a;--desk:#edf2f8;--paper:#fff;--yellow:#f8e37c;--muted:#52627a;--line:#dbe3ed;--green:#166c63}
+*{box-sizing:border-box}html{background:#d6e0ed}body{margin:0;color:var(--ink);font:9.2pt/1.45 'Public Sans',Arial,sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}a{color:var(--blue);text-decoration-thickness:.7px;text-underline-offset:2px}a:focus-visible{outline:2px solid var(--blue);outline-offset:3px}p{margin:0 0 2.9mm}h1,h2,h3{font-weight:600;margin:0}h1,h2{font-family:'Barlow Condensed','Arial Narrow',Arial,sans-serif}h1{font-size:31pt;line-height:1}h2{font-size:27pt;line-height:1.08;margin:0 0 3.5mm}h3{font-size:11pt;line-height:1.3;margin:4mm 0 2mm}strong{font-weight:700}small{font-size:8pt;color:var(--muted)}.page{width:210mm;height:297mm;margin:8mm auto;background:var(--paper);padding:12mm 15mm 10mm;display:flex;flex-direction:column;box-shadow:0 4px 22px #152a4a15;break-after:page}.page:last-child{break-after:auto}.page-header{display:flex;align-items:center;justify-content:space-between;gap:6mm;padding-bottom:3mm;margin-bottom:6mm;border-bottom:1.2mm solid var(--blue);font-size:8pt;color:var(--muted)}.page-brand{font-family:'Barlow Condensed','Arial Narrow',Arial,sans-serif;color:var(--blue);font-size:19pt;line-height:1}.content{flex:1;min-height:0}.page-footer{display:flex;align-items:center;justify-content:space-between;gap:6mm;border-top:1px solid var(--line);padding-top:3mm;margin-top:4mm;font-size:7.5pt;color:var(--muted)}.page-footer span:last-child{font-weight:650;color:var(--ink)}.cover .page-header{margin-bottom:5mm}.cover h1{color:var(--blue);font-size:24pt;margin-bottom:2mm}.cover-title{font:600 44pt/.98 'Barlow Condensed','Arial Narrow',Arial,sans-serif;letter-spacing:-.3pt;max-width:145mm;margin:0 0 5mm}.cover-meta{display:flex;justify-content:space-between;gap:6mm;padding:3.2mm 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);font-size:8pt;line-height:1.5;margin:0 0 5mm}.cover h2{font-size:20pt;margin-bottom:2.7mm}.cover p{font-size:9.3pt;line-height:1.49}.cover h3{font-size:10.5pt;margin-top:4mm}.source-to-slip{display:grid;grid-template-columns:1fr 1fr;gap:5mm;margin:4.5mm 0 2mm;background:var(--desk);padding:5mm}.tenant-slip{padding:3mm 3mm 1mm;background:white;border-left:1mm solid #b6c7e3;align-self:center}.tenant-slip h3,.repair-slip h3{margin:0 0 2mm;font-size:11pt}.tenant-slip p{font-size:8.4pt;line-height:1.55;margin-bottom:2.7mm}.tenant-slip .quiet{font-size:7pt;color:var(--muted)}mark{background:var(--yellow);color:var(--ink);box-decoration-break:clone;-webkit-box-decoration-break:clone}.repair-slip{background:white;border:1.3px solid var(--blue);border-radius:4mm 4mm 1mm 1mm;overflow:hidden;padding-top:3mm}.repair-slip h3{padding:0 3.5mm;color:var(--blue);font-family:'Barlow Condensed','Arial Narrow',Arial,sans-serif;font-size:20pt}.repair-slip dl{margin:0 3.5mm 3mm}.repair-slip dt{font-size:7pt;color:var(--muted);margin-top:2mm}.repair-slip dd{margin:0;font-size:9.5pt;line-height:1.3;font-weight:600}.repair-slip dd:nth-of-type(2){color:var(--green)}.missing-strip{padding:2.3mm 3.5mm;background:var(--yellow);font-size:8pt;font-weight:650}.caption{font-size:7.5pt!important;color:var(--muted);line-height:1.4!important;margin:2mm 0 3.5mm}.links{display:flex;flex-wrap:wrap;gap:2mm 5mm;font-size:8pt!important;margin:4mm 0 2mm}.links span{flex-basis:100%;color:var(--muted)}.credit{font-size:7.7pt!important;line-height:1.4!important;color:var(--muted);margin-top:2mm}.architecture{background:var(--desk);padding:4mm;margin:4mm 0}.provision-line{display:flex;justify-content:space-between;gap:4mm;font-size:8pt;margin-bottom:3mm;color:var(--muted)}.provision-line strong{color:var(--ink)}.host-box{border:1.2px solid var(--blue);background:white;padding:3.5mm 4mm}.host-box h3{margin:0 0 3mm;font-size:10pt;color:var(--blue)}.runtime-flow{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:center;gap:3mm}.runtime-flow>div{min-width:0}.runtime-flow strong{display:block;font-size:10pt}.runtime-flow span{font-size:8pt;color:var(--muted)}.runtime-flow .flow-arrow{font-size:16pt;color:var(--blue)}.network-note{font-size:7.6pt;border-top:1px solid var(--line);margin-top:3mm;padding-top:2.5mm;color:var(--muted)}.return-line{text-align:center;font-size:8.2pt;margin-top:3.5mm;color:var(--blue);font-weight:650}ol,ul{padding-left:5mm;margin:2mm 0 4mm}li{padding-left:.5mm;margin:0 0 1.8mm}table{width:100%;border-collapse:collapse;margin:2.5mm 0 3mm;font-size:8.2pt;line-height:1.4}th{font-weight:650;background:var(--desk);color:var(--ink);text-align:left;padding:1.9mm 2mm;border-bottom:1.2px solid #aabdd9}td{padding:1.9mm 2mm;border-bottom:1px solid var(--line);vertical-align:top}tr{break-inside:avoid}td:first-child{font-weight:570}th[style*='right'],td[style*='right']{text-align:right;white-space:nowrap}code{font-family:'Public Sans',Arial,sans-serif;font-size:.93em;overflow-wrap:anywhere;color:#183d86;background:#f1f5fc;padding:0 .4mm;border-radius:.5mm}pre{font-family:'Public Sans',Arial,sans-serif;font-size:8.3pt;line-height:1.55;white-space:pre-wrap;margin:3mm 0 4mm;padding:3mm 4mm;background:var(--desk);border-left:1mm solid var(--blue)}pre code{background:transparent;padding:0;color:var(--ink);font-size:inherit}.draft-strip{padding:2.5mm 3mm;margin:3mm 0;background:var(--yellow);font-size:8pt;font-weight:600}.capacity-band{padding:3.5mm 5mm;margin:4mm 0;background:var(--desk);border-left:1.2mm solid var(--blue)}.capacity-band>strong{font-size:10pt}.capacity-band>div{font:600 23pt/1.2 'Barlow Condensed','Arial Narrow',Arial,sans-serif;margin:2mm 0}.capacity-band b{font-weight:600;color:var(--blue)}.capacity-band p{font-size:8pt;margin:0;color:var(--muted)}.references{font-size:7.5pt;line-height:1.35}.references ol{margin:1.5mm 0 0}.references li{margin-bottom:1mm}.page[data-page='4'] table{font-size:7.7pt}.page[data-page='4'] td,.page[data-page='4'] th{padding:1.55mm 1.8mm}.page[data-page='4'] p{font-size:8.8pt;line-height:1.39}.page[data-page='4'] h3{margin-top:3.8mm}.page[data-page='5'] p,.page[data-page='5'] li{font-size:9pt}.page[data-page='5'] td,.page[data-page='5'] th{padding:1.7mm 2mm}.page[data-page='5'] h2:last-of-type{margin-top:4mm;font-size:24pt}.page[data-page='6']{font-size:8.8pt}.page[data-page='6'] h2{font-size:23pt;margin-bottom:3mm}.page[data-page='6'] h2:not(:first-child){margin-top:4mm}.page[data-page='6'] table{font-size:7.7pt}.page[data-page='6'] td,.page[data-page='6'] th{padding:1.6mm 1.8mm}.page[data-page='6'] p{margin-bottom:3mm}.page[data-page='6'] pre{font-size:8pt;padding-top:2.5mm;padding-bottom:2.5mm}
+@page{size:A4;margin:0}
+@media print{html{background:white}.page{margin:0;box-shadow:none}a{text-decoration:none}.content{overflow:visible}}
+@media screen and (max-width:850px){html{background:var(--desk)}.page{width:100%;height:auto;min-height:100vh;margin:0 auto 16px;padding:20px;box-shadow:none}.page-header{margin-bottom:23px}.page-header>span:last-child{font-size:10px;text-align:right}.page-footer{margin-top:24px}.content{flex:auto}.cover-title{font-size:51px}.cover-meta{gap:10px;font-size:10px}.source-to-slip{padding:12px;gap:12px}.provision-line{display:block}.provision-line span{display:block;margin-top:4px}.page[data-page] table{font-size:10px}th[style*='right'],td[style*='right']{white-space:normal}.page[data-page] td,.page[data-page] th{padding:7px 5px}.page[data-page] p,.page[data-page] li{font-size:13px}.cover .tenant-slip p{font-size:12px}.cover .tenant-slip .quiet{font-size:10px}.runtime-flow{gap:6px}.runtime-flow strong{font-size:12px}.runtime-flow span{font-size:10px}.network-note{font-size:10px}.return-line{font-size:11px}.references li{font-size:10.5px!important}.page[data-page='6'] code{word-break:break-word}}
+@media screen and (max-width:520px){.source-to-slip{grid-template-columns:1fr}.cover-meta{flex-wrap:wrap}.cover-meta>div:last-child{flex-basis:100%}.runtime-flow{grid-template-columns:1fr}.runtime-flow .flow-arrow{transform:rotate(90deg);width:18px}.runtime-flow>div{padding:2px 0}.repair-slip h3{font-size:26px}.repair-slip dd{font-size:14px}.repair-slip dt{font-size:11px}.missing-strip{font-size:12px}.page-footer{font-size:10px}.page-brand{font-size:23px}h2{font-size:30px}.page[data-page='6'] pre{font-size:11px}}
+</style></head><body><article class="page cover" data-page="1"><header class="page-header"><span class="page-brand">HausPost</span><span>Purpose and value</span></header><main class="content"><h1>HausPost</h1>
+<div class="cover-title">A clear brief for<br>the next visit.</div>
+<div class="cover-meta">
+<div><strong>Hack Apertus Online</strong><br>Track 2B / Own Project</div>
+<div><strong>blucca</strong><br>Solo participant</div>
+<div><strong>13 October 2026</strong><br>Technical report</div>
+</div>
+<h2>1. Summary</h2>
+<p>A repaired tap, a broken doorbell and a changed visit can share one tenant email. HausPost turns that multilingual thread into seven source-linked details, then helps a property coordinator prepare the right repair brief or follow-up question. Apertus proposes the current facts; the desk checks their literal source locations; the coordinator reviews their meaning and controls the exported draft.</p>
+<p>The complete prototype runs <strong>Apertus v1.5 8B Q4_K_M on a CPU-only Docker stack</strong>. The fixed-schema development run returned six of six application responses. All 30 populated quotes were located literally; 25 fields combined complete business meaning with supporting citations under Agent review. Both cases requiring follow-up retained their missing-field state. The interactive desk makes review, correction and the next handoff explicit.</p>
+<div class="source-to-slip">
+<div class="tenant-slip">
+<h3>Tenant's words</h3>
+<p class="quiet">German fixture, 13 October 2026</p>
+<p>Der Wasserhahn in der Küche ist seit gestern repariert.</p>
+<p><mark>Die Klingel an meiner Wohnung funktioniert weiterhin nicht.</mark></p>
+<p>Bitte kommen Sie stattdessen am Freitag, 16. Oktober 2026, von 14:00 bis 16:00 Uhr.</p>
+</div>
+<div class="repair-slip">
+<h3>Next repair brief</h3>
+<dl>
+<dt>Current fault</dt><dd>Apartment doorbell still broken</dd>
+<dt>Resolved</dt><dd>Kitchen tap repaired</dd>
+<dt>Requested visit</dt><dd>Friday, 16 October, 14:00–16:00<br><small>Awaiting coordinator confirmation</small></dd>
+</dl>
+<div class="missing-strip">Ask for the apartment number</div>
+</div>
+</div>
+<p class="caption">Illustrative authored fixture. The live desk also exposes cancelled visits, property details and source-link corrections.</p>
+<h3>A narrow, practical commercial test</h3>
+<p>The buyer is a small property office with an existing compatible host or private model service. The benefit to measure is time saved between reading a tenant thread and producing a correct handoff. <strong>CHF 149</strong> is a pricing hypothesis for one office's installation and a small acceptance batch. The offered pilot covers one existing compatible host and six agreed short sample threads. A real-office trial is the next validation milestone.</p>
+<p class="links"><a href="https://blucca.github.io/hauspost/">Open the example desk</a><a href="https://github.com/blucca/hauspost">Source repository</a><a href="https://blucca.github.io/hauspost/demo/">Watch the 104-second film</a></p>
+<p class="credit">Codex produced the implementation, research, synthetic examples and Agent evaluation. Participant and repository owner: blucca.</p>
+</main><footer class="page-footer"><span>Hack Apertus Online / blucca / 13 October 2026</span><span>1 / 6</span></footer></article>
+<article class="page " data-page="2"><header class="page-header"><span class="page-brand">HausPost</span><span>Organisation-controlled deployment</span></header><main class="content"><h2>2. Architecture</h2>
+<h3>Target architecture: a) On-premise</h3>
+<p>The organisation administers the application, model and weights. Docker Compose connects the application to llama.cpp on an internal network. A browser reaches the loopback port locally or through an SSH tunnel. The same stack was reproduced on a GitHub-hosted Ubuntu runner; the target is the organisation's own machine.</p>
+<div class="architecture">
+<div class="provision-line"><strong>Provisioning</strong><span>Docker Hub + GHCR + Hugging Face</span></div>
+<div class="host-box">
+<h3>Organisation-administered host</h3>
+<div class="runtime-flow">
+<div><strong>Browser desk</strong><span>Local assets<br>Review and export</span></div>
+<span class="flow-arrow">→</span>
+<div><strong>Python API</strong><span>127.0.0.1:4377<br>Standard library</span></div>
+<span class="flow-arrow">→</span>
+<div><strong>Apertus 8B</strong><span>llama.cpp :8080<br>Local Q4_K_M weights</span></div>
+</div>
+<div class="network-note">Internal model network: source text + prompt in; structured fields out</div>
+</div>
+<div class="return-line">Exact source checks → coordinator review → internal brief + tenant-language reply</div>
+</div>
+<h3>Source-linked review is the product contract</h3>
+<ol>
+<li><strong>Intake.</strong> Paste a short thread or open a labelled example. Editing the source clears earlier extraction and review state.</li>
+<li><strong>Extract.</strong> The API makes one Apertus request for seven fixed fields and a language code. One process-wide inference slot serialises accepted work; a busy request receives HTTP 409.</li>
+<li><strong>Locate.</strong> Each supporting quote must occur once as a continuous substring. The API returns offsets in JavaScript UTF-16 units. Missing, unmatched and ambiguous evidence have separate states.</li>
+<li><strong>Review.</strong> Select a field to highlight its source; repair the quote or value; label coordinator-supplied information; confirm reviewed details.</li>
+<li><strong>Handoff.</strong> Generate an internal brief and a reply in German, French, Italian or English. Missing details lead to a question, and a resolved-only update leads to a closure reply. Visit windows retain their requested status.</li>
+</ol>
+<h3>External dependencies, separated by phase</h3>
+<table>
+<thead>
+<tr>
+<th>Phase / profile</th>
+<th>Dependency and data movement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Build and first provision</td>
+<td>Pinned Python base and llama.cpp images; a 5.06 GB GGUF downloaded directly from its Hugging Face publisher. Assets and fonts are bundled.</td>
+</tr>
+<tr>
+<td>On-prem runtime</td>
+<td>Application-to-model HTTP inside Docker. The model port stays internal; the application publishes on loopback. The application ingress bridge also supplies an outbound route.</td>
+</tr>
+<tr>
+<td>Optional hosted profile</td>
+<td><code>make hosted</code> sends the thread and prompt to the operator's configured OpenAI-compatible Apertus provider.</td>
+</tr>
+<tr>
+<td>Public example desk</td>
+<td>Prepared fixtures and separately labelled recorded outputs are loaded in the browser. Live inference is available in the running application.</td>
+</tr>
+</tbody>
+</table>
+<p>Python's standard library serves the HTML/CSS/JavaScript desk. Tenant text stays in the active request and browser interaction; reproducibility artifacts contain synthetic messages.</p>
+</main><footer class="page-footer"><span>Hack Apertus Online / blucca / 13 October 2026</span><span>2 / 6</span></footer></article>
+<article class="page " data-page="3"><header class="page-header"><span class="page-brand">HausPost</span><span>Model and data</span></header><main class="content"><h2>3. Use of Apertus</h2>
+<p>Apertus performs <strong>inference for multilingual state extraction</strong>: current versus resolved repairs, changed visits, identifiers and exact supporting quotes. The application creates the handoff from reviewed fields and language-specific templates.</p>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Rebuild setting</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Model</td>
+<td><code>swiss-ai/Apertus-v1.5-8B</code>, text-only Q4_K_M conversion by Colby</td>
+</tr>
+<tr>
+<td>Weights</td>
+<td>Pinned revision <code>248ec68a63e219e3f061e4c946fc8a20d63b9975</code>; 5,059,027,136 bytes</td>
+</tr>
+<tr>
+<td>Server</td>
+<td>llama.cpp <code>server-b11561</code>, one slot, 4 CPU threads; 4,096-token context</td>
+</tr>
+<tr>
+<td>Generation</td>
+<td>Temperature 0; at most 1,500 output tokens; thinking disabled; server-default seed</td>
+</tr>
+<tr>
+<td>CPU profile</td>
+<td>256-token logical batch / 128-token physical batch; 420-second response deadline</td>
+</tr>
+<tr>
+<td>Field contract</td>
+<td><code>active_issue</code>, <code>resolved_issue</code>, <code>property_address</code>, <code>apartment</code>, <code>requested_visit</code>, <code>cancelled_visit</code>, <code>contact_name</code></td>
+</tr>
+</tbody>
+</table>
+<p>Each field carries <code>{ &quot;value&quot;: string | null, &quot;quote&quot;: string | null }</code>; language is <code>de</code>, <code>fr</code>, <code>it</code> or <code>en</code>. Absent facts use JSON <code>null</code>. Conflicting availability keeps its source passage and a null proposed time for clarification.</p>
+<h3>A revision driven by observed failures</h3>
+<p>The measured baseline <code>3a92887</code> used a worked French example and JSON-object generation. Candidate <strong><code>01512a8</code></strong> adds the fixed nested JSON schema, full-address and closure-intent instructions, and an additional worked conflict/footer example. It encodes the tenant thread as source data and places extraction instructions in the system message. Prompt text and examples are committed in <code>track_2b/src/server.py</code>.</p>
+<p>The contract asks for short, unique verbatim quotes, original identifiers and times, and English issue summaries. Candidate smoke returned HTTP 200 but missed the cancelled Wednesday visit; the six-case rerun is in progress.</p>
+<h2>4. Data</h2>
+<p><code>track_2b/data/cases.json</code> contains <strong>six author-written fictional threads</strong>, 71–102 words each, spanning German, French, Italian and English. The cases combine dated current messages with quoted history. Expected values, missing fields and exact supporting passages accompany each case.</p>
+<table>
+<thead>
+<tr>
+<th>Language</th>
+<th>Development cases</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>German</td>
+<td>Repaired tap / active doorbell / changed visit / missing unit; archived repair inside a current administrative inquiry</td>
+</tr>
+<tr>
+<td>French</td>
+<td>New bathroom light fault after a repaired leak</td>
+</tr>
+<tr>
+<td>Italian</td>
+<td>Restored heating with an explicit request to close the ticket</td>
+</tr>
+<tr>
+<td>English</td>
+<td>Mutually exclusive visit requests; an instruction-like footer that attempts to replace property facts</td>
+</tr>
+</tbody>
+</table>
+<p>Fictional text and annotations use <strong>CDLA-Permissive-2.0</strong>. Authored examples and recorded outputs have separate UI labels and files.</p>
+<p><strong>Scope:</strong> the public cases and a separately authored German smoke informed development. Automated checks and independent Agent semantic review measure these named examples. A consenting field trial and held-out mailbox sample are next.</p>
+</main><footer class="page-footer"><span>Hack Apertus Online / blucca / 13 October 2026</span><span>3 / 6</span></footer></article>
+<article class="page " data-page="4"><header class="page-header"><span class="page-brand">HausPost</span><span>Quality and failure analysis</span></header><main class="content"><h2>5. Evaluation</h2>
+<p>Success requires current facts and supporting source links. Automated checks measure response format and literal quotes. Codex Agent review assesses current state, location, dates, uncertainty, closure intent and citation relevance. These are six public synthetic development cases.</p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th style="text-align:right">JSON-object baseline</th>
+<th style="text-align:right">Fixed schema</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Application responses</td>
+<td style="text-align:right">5 / 6</td>
+<td style="text-align:right">6 / 6</td>
+</tr>
+<tr>
+<td>Literal quote on populated fields</td>
+<td style="text-align:right">21 / 27</td>
+<td style="text-align:right">30 / 30</td>
+</tr>
+<tr>
+<td>Complete meaning on populated fields</td>
+<td style="text-align:right">21 / 27</td>
+<td style="text-align:right">25 / 30</td>
+</tr>
+<tr>
+<td>Complete meaning <strong>and</strong> literal quote</td>
+<td style="text-align:right">18 / 27</td>
+<td style="text-align:right">25 / 30</td>
+</tr>
+<tr>
+<td>All seven fields semantically complete</td>
+<td style="text-align:right">1 / 6</td>
+<td style="text-align:right">3 / 6</td>
+</tr>
+<tr>
+<td>Whole case complete, including supplied quotes</td>
+<td style="text-align:right">0 / 6</td>
+<td style="text-align:right">2 / 6</td>
+</tr>
+<tr>
+<td>Required follow-up states retained</td>
+<td style="text-align:right">0 / 2</td>
+<td style="text-align:right">2 / 2</td>
+</tr>
+</tbody>
+</table>
+<p>The baseline's populated-field denominator covers five accepted responses; its sixth attempt returned HTTP 502. Whole-case checks include expected empty values and quote-only conflicts. German and French summaries retain their input language; English summary style is assessed separately.</p>
+<h3>Remaining errors and coordinator actions</h3>
+<table>
+<thead>
+<tr>
+<th>Case</th>
+<th>Recorded fixed-schema behaviour</th>
+<th>Review action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>German reschedule / French light</td>
+<td>Current facts, address and citations complete.</td>
+<td>Review each field; ask for the German unit.</td>
+</tr>
+<tr>
+<td>Italian recovery</td>
+<td>Explicit ticket-closure request omitted.</td>
+<td>Include the tenant's closure request.</td>
+</tr>
+<tr>
+<td>English conflicting slots</td>
+<td>Visit correctly empty; conflict quote joins a newline.</td>
+<td>Attach the verbatim conflict and ask for one time.</td>
+</tr>
+<tr>
+<td>German administration</td>
+<td>March door complaint classified as resolved.</td>
+<td>Clear the historical repair; route the current inquiry.</td>
+</tr>
+<tr>
+<td>English instruction footer</td>
+<td>“All clear” / 99Z adopted; repaired intercom cites an old failure.</td>
+<td>Correct fault and source relevance; the new unit-value gate blocks 99Z.</td>
+</tr>
+</tbody>
+</table>
+<h3>Deterministic fix and end-to-end evidence</h3>
+<p>After the model run, copied address, unit and name values gained a value-in-quote check. Replaying the real <strong>99Z / Apartment 4B</strong> answer yields <code>value_mismatch</code>; the browser blocks confirmation until corrected. Original responses stay unchanged.</p>
+<p>The separate German smoke misses the cancelled Wednesday: <strong>7/9</strong> in both schema runs, retained as a workflow failure. The final film includes a real <strong>87.917-second</strong> CPU request and labelled replay of that answer for scripted correction, German clarification, coordinator entry 3B and handoff. The footer correction gate also passes the recorded browser flow.</p>
+<p class="caption">Baseline: 3a92887 / run 38326610654. Fixed schema: bb1f70f / run 38328626014. Post-run application checks: 80775fc. Raw responses and Agent judgements: <a href="https://github.com/blucca/hauspost/blob/main/track_2b/docs/evaluation.md">evaluation guide</a>.</p>
+</main><footer class="page-footer"><span>Hack Apertus Online / blucca / 13 October 2026</span><span>4 / 6</span></footer></article>
+<article class="page " data-page="5"><header class="page-header"><span class="page-brand">HausPost</span><span>Capacity and operating scope</span></header><main class="content"><h2>5. Evaluation: resources and scale</h2>
+<p>The fixed-schema reproduction used <strong>four CPU threads</strong>, Ubuntu 24.04 and roughly <strong>15 GiB visible host RAM</strong>. The model container has a 7 GiB / 4 CPU budget; the Python application has a 512 MiB / 1 CPU budget.</p>
+<table>
+<thead>
+<tr>
+<th>Measurement</th>
+<th style="text-align:right">Observed fixed-schema run</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Six HTTP attempts, total</td>
+<td style="text-align:right">376.527 s</td>
+</tr>
+<tr>
+<td>Mean / median</td>
+<td style="text-align:right">62.755 / 65.442 s</td>
+</tr>
+<tr>
+<td>Shortest / longest</td>
+<td style="text-align:right">50.068 / 72.967 s</td>
+</tr>
+<tr>
+<td>First provision + startup</td>
+<td style="text-align:right">93 s</td>
+</tr>
+<tr>
+<td>Model cgroup current / peak</td>
+<td style="text-align:right">6.992 / 7.000 GiB</td>
+</tr>
+<tr>
+<td>Cgroup memory-limit events</td>
+<td style="text-align:right">488; zero OOM / OOM-kill events</td>
+</tr>
+<tr>
+<td>Docker working-set snapshot</td>
+<td style="text-align:right">Model 3.938 GiB; application 19.23 MiB</td>
+</tr>
+</tbody>
+</table>
+<p>Cgroup total and Docker working-set accounting measure different memory components. The observed host is 16-GB class. The repository's 8 GiB planning floor requires operating-system headroom and office acceptance above the 7 GiB model peak. The fixed context has approximately 512 MiB of F16 KV cache.</p>
+<div class="capacity-band">
+<strong>Ten times the work: 60 short threads</strong>
+<div>376.527 s × 10 = <b>62.8 minutes</b></div>
+<p>Same short-message length, output mix, warm prefix cache and host; one attempt per thread; sequential single-slot service.</p>
+</div>
+<p>Including observed first provision and the separate smoke gives <strong>66.9 minutes</strong>. An external serial caller or queue supplies the next request; concurrent arrivals receive a busy response. Coordinator review, retry load and power consumption are office-pilot measurements.</p>
+<p>Customer operating cost combines existing hardware, power and review time. A host priced at CHF H per hour would allocate <strong>1.046 × H</strong> to the projected 60-message compute batch, before review. The <strong>CHF149</strong> installation pilot is a pricing test; buyer acceptance and savings are future measurements.</p>
+<h2>6. Limitations</h2>
+<ul>
+<li><strong>Workload boundary:</strong> short text threads about one property, four reply languages and a 4,096-token model context. A 16,000-character input guard also applies; a context error directs the coordinator to a shorter excerpt.</li>
+<li><strong>Evidence boundary:</strong> six public synthetic development cases and one separately authored smoke. Long histories, attachments, statistical variance and consenting real-office work belong to the next evaluation stage.</li>
+<li><strong>Quality boundary:</strong> baseline failures affected format, uncertainty, complete facts and document-instruction separation. The revised schema and prompt improve format and follow-up states; the remaining failures above receive coordinator correction.</li>
+<li><strong>Operational boundary:</strong> the shipped workflow ends in a coordinator-reviewed, downloadable draft. Organisation-wide publishing, authentication, queuing and mailbox connectors require deployment-specific work.</li>
+</ul>
+</main><footer class="page-footer"><span>Hack Apertus Online / blucca / 13 October 2026</span><span>5 / 6</span></footer></article>
+<article class="page " data-page="6"><header class="page-header"><span class="page-brand">HausPost</span><span>Run it and build on it</span></header><main class="content"><h2>7. Reproducibility</h2>
+<p>Use Docker Engine, Compose v2 and GNU Make. The measured Linux host was 16-GB class with four CPU threads. Keep 8 GiB free disk. From the repository root:</p>
+<pre><code class="language-sh">git clone https://github.com/blucca/hauspost.git
+cd hauspost
+git checkout 80775fc
+make run
+# Open http://127.0.0.1:4377
+make stop
+</code></pre>
+<p><code>make run</code> downloads the pinned GGUF and starts both containers. Downloads resume and are size-checked. <code>make demo</code> opens saved examples; <code>make hosted</code> uses <code>track_2b/.env</code>. Browser assets and fonts are local.</p>
+<table>
+<thead>
+<tr>
+<th>Reproduction item</th>
+<th>Exact reference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Measured baseline</td>
+<td><code>3a92887fba824528a59eb45a3a013e49b008c655</code>; run <code>38326610654</code></td>
+</tr>
+<tr>
+<td>Measured fixed schema</td>
+<td><code>bb1f70f</code>; run <code>38328626014</code></td>
+</tr>
+<tr>
+<td>Post-run application revision</td>
+<td><code>80775fc</code>; copied-identifier gate and accessible field labels</td>
+</tr>
+<tr>
+<td>Local checks</td>
+<td><code>PYTHONDONTWRITEBYTECODE=1 python track_2b/tests/check.py</code></td>
+</tr>
+<tr>
+<td>Real-model evaluation</td>
+<td>Dispatch <strong>Apertus on-prem smoke</strong>; the smoke, browser capture and six-case batch retain independent outcomes.</td>
+</tr>
+</tbody>
+</table>
+<p>Artifacts retain inputs, raw answers, field results, timing and runtime diagnostics, including failures. Temperature is 0; seed uses the server default. Exact image/model pins and network details: <code>track_2b/docs/deployment.md</code>.</p>
+<h2>8. Next steps</h2>
+<p>Recruit one coordinator and a consenting mailbox batch. Measure correct-handoff time and corrections against the office's process. Add held-out multilingual evaluation, then choose integration work from actual demand. Continue the <strong>CHF149 installation pilot</strong> when time savings and price acceptance support it.</p>
+<h2>License</h2>
+<p>Documentation: <strong>CC-BY-4.0</strong>. Source: <strong>Apache-2.0</strong>. Synthetic data: <strong>CDLA-Permissive-2.0</strong>. Bundled fonts retain OFL notices. Model weights are obtained separately from the publisher; the deployment guide links the model licence and Apertus 1.5 Acceptable Use Policy, including weight-redistribution obligations.</p>
+<h2>References</h2>
+<div class="references">
+<ol>
+<li><a href="https://github.com/HackApertus/project-template/tree/main/track_2b">Hack Apertus Track 2B template and report contract</a>.</li>
+<li><a href="https://huggingface.co/swiss-ai/Apertus-v1.5-8B">Apertus v1.5 8B model</a> and <a href="https://huggingface.co/Colby/apertus-v1.5-8b-text-Q4_K_M-GGUF">pinned Q4_K_M publisher</a>.</li>
+<li><a href="https://github.com/ggml-org/llama.cpp/tree/master/tools/server">llama.cpp server</a>; <a href="https://github.com/swiss-ai/apertus-legal/blob/main/apertus_1.5/USAGE_POLICY.pdf">Apertus 1.5 use policy</a>.</li>
+<li><a href="https://docs.github.com/en/actions/reference/runners/github-hosted-runners">GitHub-hosted runner specifications</a>.</li>
+<li><a href="https://github.com/blucca/hauspost">HausPost source and live example desk</a>; <a href="https://github.com/blucca/hauspost/blob/main/track_2b/docs/deployment.md">deployment guide</a>; <a href="https://github.com/blucca/hauspost/actions/runs/38326610654">measured baseline run</a>.</li>
+</ol>
+</div>
+</main><footer class="page-footer"><span>Hack Apertus Online / blucca / 13 October 2026</span><span>6 / 6</span></footer></article></body></html>
