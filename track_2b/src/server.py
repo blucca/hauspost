@@ -65,6 +65,7 @@ class APIError(Exception):
     def __init__(self, status, code, message):
         super().__init__(message)
         self.status, self.code = status, code
+        self.metadata = {}
 
 
 def configuration():
@@ -152,6 +153,7 @@ def call_model(text, config):
     started = time.perf_counter()
     timeout = config["timeout_seconds"]
     payload = {"model": config["model"], "temperature": 0, "max_tokens": 2600,
+               "response_format": {"type": "json_object"},
                "messages": [{"role": "system", "content": SYSTEM_PROMPT},
                             {"role": "user", "content": f"Tenant email:\n<tenant_email>\n{EXAMPLE_EMAIL}\n</tenant_email>"},
                             {"role": "assistant", "content": json.dumps(EXAMPLE_OUTPUT, ensure_ascii=False)},
@@ -188,9 +190,14 @@ def call_model(text, config):
         usage = response.get("usage", {})
     except (ValueError, KeyError, IndexError, TypeError, RecursionError):
         raise APIError(502, "model_format", "The endpoint requires an OpenAI-compatible chat response. Check its configuration and retry.") from None
-    result = parse_model_output(raw, text)
-    result.update(model=config["model"], usage=usage if isinstance(usage, dict) else {},
-                  elapsed_ms=round((time.perf_counter() - started) * 1000), raw_model_output=raw)
+    metadata = {"model": config["model"], "usage": usage if isinstance(usage, dict) else {},
+                "elapsed_ms": round((time.perf_counter() - started) * 1000), "raw_model_output": raw}
+    try:
+        result = parse_model_output(raw, text)
+    except APIError as error:
+        error.metadata = metadata
+        raise
+    result.update(metadata)
     return result
 
 
@@ -283,7 +290,7 @@ class Handler(BaseHTTPRequestHandler):
                 MODEL_LOCK.release()
             self.send_json(200, result)
         except APIError as error:
-            self.send_json(error.status, {"error": error.code, "message": str(error)})
+            self.send_json(error.status, {"error": error.code, "message": str(error), **error.metadata})
         except Exception:
             self.send_json(500, {"error": "request_failed", "message": "Check the endpoint configuration and restart HausPost, then retry."})
 

@@ -67,6 +67,7 @@ def upstream(request, timeout):
     assert request.get_header("Authorization") is None
     assert timeout == 420
     sent = json.loads(request.data)
+    assert sent["response_format"] == {"type": "json_object"}
     assert [message["role"] for message in sent["messages"]] == ["system", "user", "assistant", "user"]
     assert sent["messages"][-1]["content"] == f"Tenant email:\n<tenant_email>\n{source}\n</tenant_email>"
     return io.BytesIO(json.dumps({"choices": [{"message": {"content": raw}}],
@@ -99,6 +100,11 @@ try:
                 assert request("POST", "/api/analyse", {"text": source}, headers)[1]["error"] == "analysis_busy"
             finally:
                 app.MODEL_LOCK.release()
+            raw = '{"language":"fr","fields":'
+            status, result = request("POST", "/api/analyse", {"text": source}, headers)
+            assert status == 502 and result["error"] == "model_format"
+            assert result["raw_model_output"] == raw and result["model"] == app.configuration()["model"]
+            assert result["usage"]["completion_tokens"] == 90 and isinstance(result["elapsed_ms"], int)
 finally:
     httpd.shutdown()
     httpd.server_close()
