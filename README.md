@@ -62,4 +62,4 @@ HausPost handles short text threads about one property. The coordinator reviews 
 
 Started on **13 October 2026** for **Hack Apertus, Track 2B**, from the official project template. Participant and repository owner: **blucca**. The implementation, research, synthetic examples, and checks were produced with the Codex AI agent; the repository records that contribution openly.
 
-Application code: [Apache-2.0](LICENSE). Documentation: CC-BY-4.0. Synthetic data: CC0-1.0. Bundled fonts retain their OFL notices. Model weights are obtained separately under the publisher’s stated terms.
+Application code: [Apache-2.0](LICENSE). Documentation: CC-BY-4.0. Synthetic data: CDLA-Permissive-2.0. Bundled fonts retain their OFL notices. Model weights are obtained separately under the publisher’s stated terms.

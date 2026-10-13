@@ -9,7 +9,7 @@ permissions:
 jobs:
   onprem:
     runs-on: ubuntu-24.04
-    timeout-minutes: 20
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
 
@@ -66,9 +66,9 @@ jobs:
               checks["real_apertus_8b"] = result.get("model") == "swiss-ai/apertus-v1.5-8b"
               checks["active_bell"] = bool(re.search(r"bell|intercom|klingel|sprechanlage", str(fields["active_issue"]["value"]), re.I))
               checks["resolved_tap"] = bool(re.search(r"tap|faucet|wasserhahn", str(fields["resolved_issue"]["value"]), re.I))
-              requested = fields["requested_visit"].get("quote", "")
+              requested = fields["requested_visit"].get("quote") or ""
               checks["requested_friday"] = bool(re.search(r"freitag|friday", requested, re.I)) or all(re.search(rf"\b{hour}\b", requested) for hour in (14, 16))
-              checks["cancelled_wednesday"] = bool(re.search(r"mittwoch|wednesday", fields["cancelled_visit"].get("quote", ""), re.I))
+              checks["cancelled_wednesday"] = bool(re.search(r"mittwoch|wednesday", fields["cancelled_visit"].get("quote") or "", re.I))
               utf16 = source.encode("utf-16-le")
               for name in ("active_issue", "resolved_issue", "requested_visit", "cancelled_visit"):
                   field = fields[name]
@@ -97,6 +97,13 @@ jobs:
           raise SystemExit(0 if passed else 1)
           PY
 
+      - name: Record six multilingual cases on the same model
+        if: success()
+        run: |
+          python3 track_2b/tests/evaluate.py \
+            --output temp/onprem-smoke/cases \
+            --deadline "$(( $(cat temp/onprem-smoke/started-at.txt) + 1740 ))"
+
       - name: Collect bounded runtime diagnostics
         if: always()
         run: |
@@ -106,8 +113,11 @@ jobs:
           docker compose -f track_2b/compose.yaml -f track_2b/compose.onprem.yaml ps -a > temp/onprem-smoke/containers.txt || true
           app_id=$(docker compose -f track_2b/compose.yaml -f track_2b/compose.onprem.yaml ps -q app)
           if [ -n "$app_id" ]; then docker inspect --format '{{json .NetworkSettings.Ports}}' "$app_id" > temp/onprem-smoke/app-ports.json; fi
+          model_id=$(docker compose -f track_2b/compose.yaml -f track_2b/compose.onprem.yaml ps -q model)
+          if [ -n "$model_id" ]; then docker exec "$model_id" sh -c 'for name in memory.current memory.peak memory.events; do echo "$name"; cat "/sys/fs/cgroup/$name"; done' > temp/onprem-smoke/model-memory.txt 2>&1 || true; fi
           if [ -f temp/onprem-smoke/started-at.txt ]; then docker events --since "$(cat temp/onprem-smoke/started-at.txt)" --until "$(date -u +%s)" --filter type=container --filter event=oom --format '{{json .}}' > temp/onprem-smoke/oom-events.jsonl || true; fi
           if [ -f temp/onprem-smoke/summary.md ]; then cat temp/onprem-smoke/summary.md >> "$GITHUB_STEP_SUMMARY"; fi
+          if [ -f temp/onprem-smoke/cases/summary.md ]; then cat temp/onprem-smoke/cases/summary.md >> "$GITHUB_STEP_SUMMARY"; fi
 
       - uses: actions/upload-artifact@v4
         if: always()

@@ -38,7 +38,7 @@ The application builds the final handoff and language-specific reply templates f
 
 `data/cases.json` contains six author-written fictional threads, each 71–102 words, with expected fields and source passages. Names and addresses are fictional. The cases cover an amended German repair, a French second fault after a completed repair, an Italian resolved update, conflicting English availability, a stale quoted repair, and an instruction-like footer.
 
-Authored examples and measured model responses are stored separately and labelled in the UI. Synthetic input and annotations are released under CC0-1.0. Runtime tenant text stays in the current request and browser interaction. The repository’s model checks use synthetic content.
+Authored examples and measured model responses are stored separately and labelled in the UI. Synthetic input and annotations are released under CDLA-Permissive-2.0. Runtime tenant text stays in the current request and browser interaction. The repository’s model checks use synthetic content.
 
 ## 5. Evaluation
 
@@ -75,7 +75,7 @@ Complete the measured four-language evaluation, the six-page PDF and the two-min
 
 ## License
 
-Documentation: Creative Commons Attribution 4.0 (CC-BY-4.0). Application source: Apache-2.0. Synthetic data: CC0-1.0. Model publisher terms and font notices are retained in their respective references.
+Documentation: Creative Commons Attribution 4.0 (CC-BY-4.0). Application source: Apache-2.0. Synthetic data: CDLA-Permissive-2.0. Model publisher terms and font notices are retained in their respective references.
 
 ## References
 

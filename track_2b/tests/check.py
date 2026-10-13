@@ -13,6 +13,9 @@ sys.dont_write_bytecode = True
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 import server as app
 
+example = app.parse_model_output(json.dumps(app.EXAMPLE_OUTPUT, ensure_ascii=False), app.EXAMPLE_EMAIL)
+assert all(field["evidence_status"] == "matched" for field in example["fields"].values())
+
 source = "📨 Bonjour.\nLe chauffage est réparé.\nFuite encore active.\nVendredi 09:00\nVendredi 09:00"
 payload = {"language": "fr", "fields": {
     "active_issue": {"value": "Leaking inlet", "quote": "Fuite encore active."},
@@ -64,7 +67,8 @@ def upstream(request, timeout):
     assert request.get_header("Authorization") is None
     assert timeout == 420
     sent = json.loads(request.data)
-    assert json.loads(sent["messages"][1]["content"])["tenant_email"] == source
+    assert [message["role"] for message in sent["messages"]] == ["system", "user", "assistant", "user"]
+    assert sent["messages"][-1]["content"] == f"Tenant email:\n<tenant_email>\n{source}\n</tenant_email>"
     return io.BytesIO(json.dumps({"choices": [{"message": {"content": raw}}],
                                   "usage": {"prompt_tokens": 100, "completion_tokens": 90}}).encode())
 

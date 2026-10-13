@@ -64,10 +64,18 @@ LLM_API_KEY=your-private-key
 
 ## One real-model CI smoke
 
-The manually dispatched **Apertus on-prem smoke** workflow runs on a standard public-repository `ubuntu-24.04` runner. GitHub documents 4 CPUs, 16 GB RAM and 14 GB SSD for this runner. The job has a 20-minute deadline.
+The manually dispatched **Apertus on-prem smoke** workflow runs on a standard public-repository `ubuntu-24.04` runner. GitHub documents 4 CPUs, 16 GB RAM and 14 GB SSD for this runner. The job has a 30-minute deadline.
 
 It starts the same `make run` stack and submits a new German repair thread through `POST /api/analyse`. The thread separates a repaired tap, an active broken doorbell, a cancelled Wednesday proposal and a requested Friday visit. Checks cover those four fields and their `evidence_status=matched` source spans. Source offsets use UTF-16 units, matching the browser API contract. Each model call uses the real downloaded Apertus weights.
 
 Artifacts contain the synthetic input, status, complete response, raw model output, check summary, host specifications and bounded container logs. A failed semantic check remains a failed run with its raw result attached. The workflow stops the containers after collecting diagnostics.
 
 This run records **deployment reproduction on GitHub-hosted CI**. The deployment target is an organisation-administered machine running the same Docker configuration. The artifact gives the precise environment and observed outcome for the reproduction attempt.
+
+### Six-case development evaluation
+
+After the independent German smoke passes, `tests/evaluate.py` sends the six existing `data/cases.json` threads sequentially through the same application and model containers. Each request carries the source text. Expected answers are used by the local evaluator to calculate measurements. The shared prompt prefix can remain cached between calls.
+
+The evaluator records `language_match`, `active_presence_match`, `resolved_presence_match`, `expected_missing_match`, `matched_source_count` and `valued_field_count`. Presence checks compare populated versus empty fields. Matched-source counts cover populated fields whose UTF-16 span equals the quoted source. Issue meaning and temporal interpretation receive separate human review. A recorded response can therefore complete evaluation with failed structural measurements; request or parsing errors make the evaluation step fail.
+
+Each case saves its source, request, response, error, elapsed time and measurements under `temp/onprem-smoke/cases/`. JSON and readable field-value/evidence tables are checkpointed after each case. Request timeouts are capped at 480 seconds; the evaluation deadline reserves the final minute for diagnostics and artifacts. A failed first smoke skips these six calls.

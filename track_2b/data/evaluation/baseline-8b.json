@@ -1,0 +1,75 @@
+{
+  "run": "https://github.com/blucca/hauspost/actions/runs/38322751203",
+  "commit": "ba9d24b",
+  "model": "swiss-ai/apertus-v1.5-8b",
+  "quantization": "Q4_K_M",
+  "role": "Baseline deployment smoke before prompt revision",
+  "input_kind": "synthetic",
+  "source": "Von: Eva Keller\nBetreff: Ringstrasse 12, Wohnung 3B – neue Meldung\n\nDer tropfende Wasserhahn wurde am Montag repariert. Seit gestern ist die Klingel defekt. Die Wohnung ist in der Ringstrasse 12, 8000 Zürich, Wohnung 3B. Der für Mittwoch vorgeschlagene Termin entfällt. Ich könnte stattdessen am Freitag zwischen 14 und 16 Uhr zu Hause sein. Bitte bestätigen Sie mir einen Termin; bisher wurde Freitag noch nicht bestätigt.\n\nFreundliche Grüsse\nEva Keller",
+  "result": {
+    "language": "de",
+    "fields": {
+      "active_issue": {
+        "value": null,
+        "quote": null,
+        "start": null,
+        "end": null,
+        "evidence_status": "missing"
+      },
+      "resolved_issue": {
+        "value": null,
+        "quote": null,
+        "start": null,
+        "end": null,
+        "evidence_status": "missing"
+      },
+      "property_address": {
+        "value": "Ringstrasse 12, 8000 Zürich",
+        "quote": "Ringstrasse 12, 8000 Zürich",
+        "start": 180,
+        "end": 207,
+        "evidence_status": "matched"
+      },
+      "apartment": {
+        "value": "3B",
+        "quote": "Wohnung 3B",
+        "start": null,
+        "end": null,
+        "evidence_status": "ambiguous"
+      },
+      "requested_visit": {
+        "value": null,
+        "quote": null,
+        "start": null,
+        "end": null,
+        "evidence_status": "missing"
+      },
+      "cancelled_visit": {
+        "value": null,
+        "quote": null,
+        "start": null,
+        "end": null,
+        "evidence_status": "missing"
+      },
+      "contact_name": {
+        "value": "Eva Keller",
+        "quote": "Eva Keller",
+        "start": null,
+        "end": null,
+        "evidence_status": "ambiguous"
+      }
+    },
+    "model": "swiss-ai/apertus-v1.5-8b",
+    "usage": {
+      "completion_tokens": 131,
+      "prompt_tokens": 585,
+      "total_tokens": 716,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      }
+    },
+    "elapsed_ms": 71892,
+    "raw_model_output": "{\"language\":\"de\",\"fields\":{\"active_issue\":{\"value\":null,\"quote\":null},\"resolved_issue\":{\"value\":null,\"quote\":null},\"property_address\":{\"value\":\"Ringstrasse 12, 8000 Zürich\",\"quote\":\"Ringstrasse 12, 8000 Zürich\"},\"apartment\":{\"value\":\"3B\",\"quote\":\"Wohnung 3B\"},\"requested_visit\":{\"value\":null,\"quote\":\"\"},\"cancelled_visit\":{\"value\":null,\"quote\":\"\"},\"contact_name\":{\"value\":\"Eva Keller\",\"quote\":\"Eva Keller\"}}}"
+  },
+  "observation": "The model omitted active_issue, resolved_issue, requested_visit and cancelled_visit. Property address matched; apartment and contact quotes were repeated in the source."
+}

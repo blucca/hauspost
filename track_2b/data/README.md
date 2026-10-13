@@ -26,4 +26,4 @@ Local validation checks six records, seven field keys, the 220-word limit, and e
 
 ## Licence
 
-The synthetic case text and expected annotations are dedicated to the public domain under [CC0-1.0](https://creativecommons.org/publicdomain/zero/1.0/). `recorded-runs.json` stores separately identified outputs from real Apertus runs as they are collected.
+The synthetic case text and expected annotations are made available under the [Community Data License Agreement – Permissive 2.0](LICENSE). `recorded-runs.json` stores separately identified outputs from real Apertus runs as they are collected.

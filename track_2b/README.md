@@ -22,4 +22,4 @@ See the [project README](../README.md) for the workflow and [deployment guide](d
 
 The PDF and two-minute video are being prepared for the official Track 2B submission.
 
-Code: Apache-2.0. Documentation: CC-BY-4.0. Synthetic case data: CC0-1.0.
+Code: Apache-2.0. Documentation: CC-BY-4.0. Synthetic case data: CDLA-Permissive-2.0.
