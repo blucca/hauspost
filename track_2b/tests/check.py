@@ -15,6 +15,11 @@ import server as app
 
 example = app.parse_model_output(json.dumps(app.EXAMPLE_OUTPUT, ensure_ascii=False), app.EXAMPLE_EMAIL)
 assert all(field["evidence_status"] == "matched" for field in example["fields"].values())
+review = app.parse_model_output(json.dumps(app.REVIEW_OUTPUT, ensure_ascii=False), app.REVIEW_EMAIL)
+assert review["fields"]["requested_visit"]["value"] is None
+assert all(field["evidence_status"] == "matched" for field in review["fields"].values() if field["value"])
+empty = app.parse_model_output('{"language":"de","fields":{"apartment":{"value":"null","quote":null}}}', "Address")
+assert empty["fields"]["apartment"]["value"] is None
 
 source = "📨 Bonjour.\nLe chauffage est réparé.\nFuite encore active.\nVendredi 09:00\nVendredi 09:00"
 payload = {"language": "fr", "fields": {
@@ -67,9 +72,10 @@ def upstream(request, timeout):
     assert request.get_header("Authorization") is None
     assert timeout == 420
     sent = json.loads(request.data)
-    assert sent["response_format"] == {"type": "json_object"}
-    assert [message["role"] for message in sent["messages"]] == ["system", "user", "assistant", "user"]
-    assert sent["messages"][-1]["content"] == f"Tenant email:\n<tenant_email>\n{source}\n</tenant_email>"
+    assert sent["response_format"]["type"] == "json_schema"
+    assert sent["response_format"]["json_schema"]["schema"] == app.OUTPUT_SCHEMA
+    assert [message["role"] for message in sent["messages"]] == ["system", "user", "assistant", "user", "assistant", "user"]
+    assert sent["messages"][-1]["content"] == app.email_message(source)
     return io.BytesIO(json.dumps({"choices": [{"message": {"content": raw}}],
                                   "usage": {"prompt_tokens": 100, "completion_tokens": 90}}).encode())
 

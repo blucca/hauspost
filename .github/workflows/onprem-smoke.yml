@@ -97,6 +97,13 @@ jobs:
           raise SystemExit(0 if passed else 1)
           PY
 
+      - name: Record the live browser handoff
+        run: |
+          python3 -m venv temp/video-env
+          temp/video-env/bin/pip install --disable-pip-version-check playwright==1.55.0
+          PLAYWRIGHT_BROWSERS_PATH="$PWD/temp/browsers" temp/video-env/bin/playwright install chromium
+          PLAYWRIGHT_BROWSERS_PATH="$PWD/temp/browsers" temp/video-env/bin/python track_2b/tests/record_demo.py
+
       - name: Record six multilingual cases on the same model
         if: success()
         run: |

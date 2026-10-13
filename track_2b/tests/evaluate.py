@@ -45,7 +45,7 @@ def write_summary(output, records, total):
     save_json(output / "summary.json", {"case_count": total, "cases": records})
     lines = ["# Six-case Apertus development evaluation", "",
              "Automatic measurements cover language, field presence, listed missing fields and literal source spans. "
-             "Current-issue meaning and temporal interpretation receive separate human review.", "",
+             "Current-issue meaning and temporal interpretation receive separate, labelled semantic review.", "",
              "`matched_source_count` counts valued fields with an exact UTF-16 source match. "
              "`valued_field_count` counts populated values. Quote-only fields stay outside both counts. "
              "`expected_missing_match` checks the listed missing fields; an empty list satisfies that check.", "",
