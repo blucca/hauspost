@@ -135,7 +135,7 @@
 <p>Each field carries <code>{ &quot;value&quot;: string | null, &quot;quote&quot;: string | null }</code>; language is <code>de</code>, <code>fr</code>, <code>it</code> or <code>en</code>. Absent facts use JSON <code>null</code>. Conflicting availability keeps its source passage and a null proposed time for clarification.</p>
 <h3>A revision driven by observed failures</h3>
 <p>The measured baseline <code>3a92887</code> used a worked French example and JSON-object generation. Candidate <strong><code>01512a8</code></strong> adds the fixed nested JSON schema, full-address and closure-intent instructions, and an additional worked conflict/footer example. It encodes the tenant thread as source data and places extraction instructions in the system message. Prompt text and examples are committed in <code>track_2b/src/server.py</code>.</p>
-<p>The contract asks for short, unique verbatim quotes, original identifiers and times, and English issue summaries. Candidate smoke returned HTTP 200 but missed the cancelled Wednesday visit; the six-case rerun is in progress.</p>
+<p>The contract asks for short, unique verbatim quotes, original identifiers and times, and English issue summaries. The fixed-schema run returned six of six application responses; the separate German smoke missed the cancelled Wednesday visit (7/9 checks).</p>
 <h2>4. Data</h2>
 <p><code>track_2b/data/cases.json</code> contains <strong>six author-written fictional threads</strong>, 71–102 words each, spanning German, French, Italian and English. The cases combine dated current messages with quoted history. Expected values, missing fields and exact supporting passages accompany each case.</p>
 <table>

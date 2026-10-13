@@ -41,7 +41,7 @@ The text-only model card and GGUF identify **Apache-2.0**. The publisher also pr
 
 ### Resource budget
 
-- Capacity target: **8 GiB host RAM**, 4 CPU threads and 8 GiB free disk space. A 16 GB machine provides additional operating-system headroom.
+- Measured profile: **16-GB-class host**, 4 CPU threads and 8 GiB free disk space. The **8 GiB host RAM** planning floor requires operating-system headroom and local acceptance above the observed 7 GiB model peak.
 - Provisioning container: **1 GiB RAM / 1 CPU** for the downloader and filesystem cache, released before the model starts.
 - Model container: **7 GiB RAM / 4 CPU** limit. Application: **512 MiB / 1 CPU** limit; the host shares CPU time between them.
 - Context: **4096 tokens**, one parallel slot, 256-token logical batch / 128-token physical batch, thinking disabled in the model's Jinja template.
@@ -74,8 +74,8 @@ This run records **deployment reproduction on GitHub-hosted CI**. The deployment
 
 ### Six-case development evaluation
 
-After the independent German smoke passes, `tests/evaluate.py` sends the six existing `data/cases.json` threads sequentially through the same application and model containers. Each request carries the source text. Expected answers are used by the local evaluator to calculate measurements. The shared prompt prefix can remain cached between calls.
+After provisioning succeeds, `tests/evaluate.py` sends the six existing `data/cases.json` threads sequentially through the same application and model containers. The German smoke, browser recording and six-case batch retain independent outcomes. Each request carries the source text. Expected answers are used by the local evaluator to calculate measurements. The shared prompt prefix can remain cached between calls.
 
-The evaluator records `language_match`, `active_presence_match`, `resolved_presence_match`, `expected_missing_match`, `matched_source_count` and `valued_field_count`. Presence checks compare populated versus empty fields. Matched-source counts cover populated fields whose UTF-16 span equals the quoted source. Issue meaning and temporal interpretation receive separate human review. A recorded response can therefore complete evaluation with failed structural measurements; request or parsing errors make the evaluation step fail.
+The evaluator records `language_match`, `active_presence_match`, `resolved_presence_match`, `expected_missing_match`, `matched_source_count` and `valued_field_count`. Presence checks compare populated versus empty fields. Matched-source counts cover populated fields whose UTF-16 span equals the quoted source. Issue meaning and temporal interpretation receive separate Codex Agent review in the published development results; the office pilot adds coordinator review. A recorded response can therefore complete evaluation with failed structural measurements; request or parsing errors make the evaluation step fail.
 
-Each case saves its source, request, response, error, elapsed time and measurements under `temp/onprem-smoke/cases/`. JSON and readable field-value/evidence tables are checkpointed after each case. Request timeouts are capped at 480 seconds; the evaluation deadline reserves the final minute for diagnostics and artifacts. A failed first smoke skips these six calls.
+Each case saves its source, request, response, error, elapsed time and measurements under `temp/onprem-smoke/cases/`. JSON and readable field-value/evidence tables are checkpointed after each case. Request timeouts are capped at 480 seconds; the evaluation deadline reserves the final minute for diagnostics and artifacts. A failed first smoke remains in the final acceptance outcome while the provisioned stack continues to the browser and six-case stages.

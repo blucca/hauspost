@@ -107,7 +107,7 @@ Each field carries `{ "value": string | null, "quote": string | null }`; languag
 
 The measured baseline `3a92887` used a worked French example and JSON-object generation. Candidate **`01512a8`** adds the fixed nested JSON schema, full-address and closure-intent instructions, and an additional worked conflict/footer example. It encodes the tenant thread as source data and places extraction instructions in the system message. Prompt text and examples are committed in `track_2b/src/server.py`.
 
-The contract asks for short, unique verbatim quotes, original identifiers and times, and English issue summaries. Candidate smoke returned HTTP 200 but missed the cancelled Wednesday visit; the six-case rerun is in progress.
+The contract asks for short, unique verbatim quotes, original identifiers and times, and English issue summaries. The fixed-schema run returned six of six application responses; the separate German smoke missed the cancelled Wednesday visit (7/9 checks).
 
 ## 4. Data
 
