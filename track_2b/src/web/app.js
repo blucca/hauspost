@@ -374,7 +374,7 @@ async function init() {
     }
     if (new URLSearchParams(location.search).get('live') === '1' && state.mode === 'sample') {
       try {
-        const response = await fetch('trial.json', {cache:'no-store'});
+        const response = await fetch(`https://raw.githubusercontent.com/blucca/trial-runtime/main/hauspost.json?v=${Math.floor(Date.now()/60_000)}`, {cache:'no-store'});
         const trial = await response.json();
         const endpoint = new URL(trial.url);
         if (!response.ok || endpoint.protocol !== 'https:' || Date.now() >= Date.parse(trial.ends_at)) throw new Error('The live preview has ended. Explore the recorded desk or run HausPost on your infrastructure.');
