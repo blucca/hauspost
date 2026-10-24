@@ -4,7 +4,7 @@
 
 A tenant says the tap is fixed, the doorbell is still broken, and Wednesday’s visit has moved to Friday. HausPost separates those updates, links each detail to the original words, and helps a property coordinator prepare the right repair brief or follow-up question.
 
-[Try a live email](https://blucca.github.io/hauspost/?live=1) · [Open the example desk](https://blucca.github.io/hauspost/) · [104-second demonstration](https://blucca.github.io/hauspost/demo/) · [Report PDF](track_2b/docs/technical-report.pdf) · [Deployment](track_2b/docs/deployment.md) · [Technical report](track_2b/technical_report.md)
+[Open the example desk](https://blucca.github.io/hauspost/) · [104-second demonstration](https://blucca.github.io/hauspost/demo/) · [Report PDF](track_2b/docs/technical-report.pdf) · [Deployment](track_2b/docs/deployment.md) · [Technical report](track_2b/technical_report.md)
 
 ## Use the desk
 
@@ -14,7 +14,7 @@ A tenant says the tap is fixed, the doorbell is still broken, and Wednesday’s 
 4. Confirm the reviewed details. Missing information produces a clarification draft; a resolved update produces a closure reply.
 5. Copy or download the internal brief and the tenant-language reply. Appointment windows stay **requested / awaiting confirmation**.
 
-The [live preview](https://blucca.github.io/hauspost/?live=1) accepts fictional or anonymised text through PublicAI’s Apertus v1.5 8B service. It opens with an editable example; replace the text, analyse, review the sources, and export the brief. The preview runs through **24 October 2026**, subject to available capacity. Use the self-managed stack for your organisation’s tenant data.
+The hosted preview ended on **24 October 2026 at 10:00 UTC**. The example desk, recorded demonstration, and self-managed application remain available. Run the self-managed stack for your organisation’s tenant data.
 
 The public example desk runs locally in the browser. Author-written examples and recorded model outputs have separate labels. The application’s live mode calls the operator-configured Apertus endpoint.
 
@@ -65,3 +65,5 @@ HausPost handles short text threads about one property. The coordinator reviews 
 Started on **13 October 2026** for **Hack Apertus, Track 2B**, from the official project template. Participant and repository owner: **blucca**. The implementation, research, synthetic examples, and checks were produced with the Codex AI agent; the repository records that contribution openly.
 
 Application code: [Apache-2.0](LICENSE). Documentation: CC-BY-4.0. Synthetic data: CDLA-Permissive-2.0. Bundled fonts retain their OFL notices. Model weights are obtained separately under the publisher’s stated terms.
+
+**Post-submission maintenance — 24 October 2026:** closed the time-limited hosted preview and updated its navigation. The submitted film, report, recorded results, and self-managed implementation are unchanged.
